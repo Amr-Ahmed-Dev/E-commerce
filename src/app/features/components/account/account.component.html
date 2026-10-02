@@ -1,0 +1,88 @@
+<section class="min-h-[calc(100vh-5rem)] bg-brand-bg px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-4xl">
+    <header class="mb-8">
+      <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-brand-primary">
+        Shopping Zone
+      </p>
+      <h1 class="text-3xl font-bold text-brand-dark sm:text-4xl">My Account</h1>
+      <p class="mt-2 text-sm text-slate-500">Manage your profile and account preferences.</p>
+    </header>
+
+    <div class="grid gap-6 md:grid-cols-[280px_1fr]">
+      <aside
+        class="rounded-3xl border border-slate-200 bg-brand-surface p-6 shadow-sm md:self-start"
+      >
+        <div
+          class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-3xl font-bold text-white"
+        >
+          {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+        </div>
+
+        <div class="mt-4 text-center">
+          <h2 class="text-lg font-bold text-brand-dark">Your Account</h2>
+          <p class="mt-1 break-all text-sm text-slate-500">
+            {{ authService.userEmail() || 'No email available' }}
+          </p>
+        </div>
+
+        <div class="mt-6 rounded-2xl bg-brand-bg p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Account status</p>
+          <p class="mt-2 flex items-center gap-2 text-sm font-semibold text-brand-dark">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            Active
+          </p>
+        </div>
+
+        <nav class="mt-6 space-y-1 border-t border-slate-100 pt-4">
+          <a
+            routerLink="."
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLinkActive="bg-brand-primary/10 text-brand-primary"
+            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+          >
+            Overview
+          </a>
+          <a
+            routerLink="profile"
+            routerLinkActive="bg-brand-primary/10 text-brand-primary"
+            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+          >
+            Edit profile
+          </a>
+          <a
+            routerLink="orders"
+            routerLinkActive="bg-brand-primary/10 text-brand-primary"
+            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+          >
+            My orders
+          </a>
+          <a
+            routerLink="addresses"
+            routerLinkActive="bg-brand-primary/10 text-brand-primary"
+            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+          >
+            Addresses
+          </a>
+          <a
+            routerLink="wishlist"
+            routerLinkActive="bg-brand-primary/10 text-brand-primary"
+            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+          >
+            Wishlist
+          </a>
+          <a
+            routerLink="security"
+            routerLinkActive="bg-brand-primary/10 text-brand-primary"
+            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+          >
+            Security
+          </a>
+        </nav>
+      </aside>
+
+      <div>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</section>

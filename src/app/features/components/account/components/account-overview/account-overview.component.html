@@ -1,0 +1,105 @@
+<div class="space-y-6">
+  <header class="rounded-3xl border border-slate-200/80 bg-brand-surface p-5 shadow-sm sm:p-7">
+    <p class="text-xs font-bold uppercase tracking-[0.16em] text-brand-primary">
+      {{ 'accountOverview.overview' | translate }}
+    </p>
+    <h2 class="mt-2 text-2xl font-bold tracking-tight text-brand-dark sm:text-3xl">
+      {{ 'accountOverview.welcomeTitle' | translate }}
+    </h2>
+    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+      {{ 'accountOverview.welcomeDescription' | translate }}
+    </p>
+  </header>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <a
+      routerLink="../profile"
+      class="group rounded-3xl border border-slate-200/80 bg-brand-surface p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-primary/30 hover:shadow-md sm:p-6"
+    >
+      <span
+        class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary"
+      >
+        <i class="fa-regular fa-user"></i>
+      </span>
+      <h3 class="mt-4 text-base font-bold text-brand-dark">
+        {{ 'accountOverview.profileCardTitle' | translate }}
+      </h3>
+      <p class="mt-1.5 text-sm leading-5 text-slate-500">
+        {{ 'accountOverview.profileCardDescription' | translate }}
+      </p>
+      <span class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-primary">
+        {{ 'accountOverview.manageProfile' | translate }}
+        <i
+          class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1 rtl:rotate-180"
+        ></i>
+      </span>
+    </a>
+
+    <section class="rounded-3xl border border-slate-200/80 bg-brand-surface p-5 shadow-sm sm:p-6">
+      <span
+        class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-secondary/10 text-brand-secondary"
+      >
+        <i class="fa-solid fa-globe"></i>
+      </span>
+      <h3 class="mt-4 text-base font-bold text-brand-dark">
+        {{ 'accountOverview.languageTitle' | translate }}
+      </h3>
+      <p class="mt-1.5 text-sm leading-5 text-slate-500">
+        {{ 'accountOverview.languageDescription' | translate }}
+      </p>
+
+      <div
+        class="mt-5 inline-flex rounded-xl bg-slate-100 p-1"
+        role="group"
+        [attr.aria-label]="'accountOverview.languageTitle' | translate"
+      >
+        <button
+          type="button"
+          (click)="i18nService.changeLang('en')"
+          [attr.aria-pressed]="i18nService.currentLang === 'en'"
+          [class]="
+            i18nService.currentLang === 'en'
+              ? 'bg-white text-brand-primary shadow-sm'
+              : 'text-slate-500 hover:text-brand-dark'
+          "
+          class="rounded-lg px-4 py-2 text-xs font-semibold transition"
+        >
+          {{ 'accountOverview.english' | translate }}
+        </button>
+        <button
+          type="button"
+          (click)="i18nService.changeLang('ar')"
+          [attr.aria-pressed]="i18nService.currentLang === 'ar'"
+          [class]="
+            i18nService.currentLang === 'ar'
+              ? 'bg-white text-brand-primary shadow-sm'
+              : 'text-slate-500 hover:text-brand-dark'
+          "
+          class="rounded-lg px-4 py-2 text-xs font-semibold transition"
+        >
+          {{ 'accountOverview.arabic' | translate }}
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <section
+    class="rounded-3xl border border-brand-primary/10 bg-gradient-to-br from-brand-primary/[0.06] via-brand-surface to-brand-secondary/[0.06] p-5 sm:p-6"
+  >
+    <div class="flex items-start gap-4">
+      <span
+        class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-brand-primary shadow-sm"
+      >
+        <i class="fa-solid fa-shield-halved"></i>
+      </span>
+      <div>
+        <h3 class="text-sm font-bold text-brand-dark">
+          {{ 'accountOverview.accountSafetyTitle' | translate }}
+        </h3>
+        <p class="mt-1.5 text-sm leading-6 text-slate-600">
+          {{ 'accountOverview.accountSafetyDescription' | translate }}
+        </p>
+      </div>
+    </div>
+  </section>
+</div>

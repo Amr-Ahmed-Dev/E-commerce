@@ -1,0 +1,207 @@
+<!-- Vertical Sidebar Navbar — Shopping Zone -->
+
+<aside
+  class="fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col items-center bg-brand-surface py-5 md:flex"
+>
+  <!-- Brand Mark (inline SVG logo) -->
+  <a
+    routerLink="/"
+    aria-label="Shopping Zone Home"
+    class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center overflow-hidden shadow-sm shrink-0"
+  >
+    <svg viewBox="0 0 48 48" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="szGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#2563eb" />
+          <stop offset="100%" stop-color="#9333ea" />
+        </linearGradient>
+      </defs>
+      <!-- Shopping bag body -->
+      <path d="M12 18h24l-2 22a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3L12 18z" fill="url(#szGradient)" />
+      <!-- Bag handle -->
+      <path
+        d="M17 18v-4a7 7 0 0 1 14 0v4"
+        fill="none"
+        stroke="url(#szGradient)"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <!-- Upward trend arrow -->
+      <path
+        d="M15 32l6-6 4 4 8-9"
+        fill="none"
+        stroke="white"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M28 20h5v5"
+        fill="none"
+        stroke="white"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </a>
+
+  <!-- Divider -->
+  <div class="w-8 h-px bg-slate-200 my-5"></div>
+
+  <!-- Nav Icons -->
+  <nav class="flex flex-col items-center gap-2">
+    <!-- Home -->
+    <a
+      routerLink="/"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm shadow-brand-secondary/30"
+      class="w-11 h-11 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-brand-primary transition-all"
+      aria-label="Home"
+      title="Home"
+    >
+      <i class="fa-solid fa-house text-lg"></i>
+    </a>
+
+    <!-- Shop / Categories -->
+    <a
+      routerLink="/shop"
+      routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm shadow-brand-secondary/30"
+      class="w-11 h-11 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-brand-primary transition-all"
+      aria-label="Shop"
+      title="Shop"
+    >
+      <i class="fa-solid fa-grip text-lg"></i>
+    </a>
+
+    <!-- Cart -->
+    <button
+      routerLink="/cart"
+      routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm shadow-brand-secondary/30"
+      class="relative w-11 h-11 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-brand-primary transition-all"
+      aria-label="Shopping cart"
+      title="Cart"
+    >
+      <i data-cart-icon class="fa-solid fa-cart-shopping text-lg"></i>
+      @if (cartDetail().numOfCartItems > 0) {
+        <span
+          class="absolute top-1 right-1 w-4 h-4 bg-brand-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white"
+        >
+          {{ cartDetail().numOfCartItems }}
+        </span>
+      }
+    </button>
+
+    <!-- Offers / Tag -->
+    <a
+      href="#"
+      class="w-11 h-11 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-brand-primary transition-all"
+      aria-label="Offers"
+      title="Offers"
+    >
+      <i class="fa-solid fa-tag text-lg"></i>
+    </a>
+
+    <!-- Wishlist -->
+    <button
+      class="relative w-11 h-11 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-brand-danger transition-all"
+      aria-label="Wishlist"
+      title="Wishlist"
+    >
+      <i class="fa-solid fa-heart text-lg"></i>
+      <span
+        class="absolute top-1 right-1 w-4 h-4 bg-brand-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white"
+        >2</span
+      >
+    </button>
+  </nav>
+
+  <!-- Spacer pushes the rest to the bottom -->
+  <div class="flex-1"></div>
+
+  <!-- Help -->
+  <button
+    class="w-11 h-11 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-brand-primary transition-all mb-3"
+    aria-label="24/7 Help"
+    title="24/7 Help"
+  >
+    <i class="fa-solid fa-headset text-lg"></i>
+  </button>
+
+  <!-- Avatar / Account -->
+  @if (authService.userEmail()) {
+    <a
+      routerLink="/account"
+      class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-sm font-bold text-white"
+      aria-label="Account"
+    >
+      {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+    </a>
+  } @else {
+    <a
+      routerLink="/login"
+      routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm shadow-brand-secondary/30"
+      class="group flex w-13 h-13 flex-col items-center justify-center gap-1 rounded-2xl text-slate-400 transition-all hover:bg-slate-100 hover:text-brand-primary active:scale-95"
+      aria-label="Sign in"
+      title="Sign in"
+    >
+      <i class="fa-solid fa-user text-lg"></i>
+      <span class="text-[11px] font-medium">Sign in</span>
+    </a>
+  }
+</aside>
+
+<nav
+  class="fixed inset-x-3 bottom-0 z-50 flex h-16 items-center justify-around rounded-t-2xl border border-slate-200/80 bg-brand-surface px-2 shadow-[0_4px_24px_rgba(15,23,42,0.14)] md:hidden"
+>
+  <a
+    routerLink="/"
+    [routerLinkActiveOptions]="{ exact: true }"
+    routerLinkActive="text-brand-primary"
+    class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400"
+    aria-label="Home"
+  >
+    <i class="fa-solid fa-house text-lg"></i>
+  </a>
+
+  <a
+    routerLink="/shop"
+    routerLinkActive="text-brand-primary"
+    class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400"
+    aria-label="Shop"
+  >
+    <i class="fa-solid fa-grip text-lg"></i>
+  </a>
+
+  <a
+    routerLink="/cart"
+    routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white"
+    class="relative flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-md"
+    aria-label="Shopping cart"
+  >
+    <i data-cart-icon class="fa-solid fa-cart-shopping text-lg"></i>
+    @if (cartDetail().numOfCartItems > 0) {
+      <span
+        class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-danger px-1 text-[9px] font-bold text-white ring-2 ring-white"
+      >
+        {{ cartDetail().numOfCartItems }}
+      </span>
+    }
+  </a>
+
+  <a
+    href="#"
+    class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400"
+    aria-label="Offers"
+  >
+    <i class="fa-solid fa-tag text-lg"></i>
+  </a>
+
+  <a
+    routerLink="/account"
+    class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-sm font-bold text-white"
+    aria-label="Account"
+  >
+    {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+  </a>
+</nav>

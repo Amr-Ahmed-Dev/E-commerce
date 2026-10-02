@@ -1,0 +1,191 @@
+<!------------------------------- Hero Carousel-------------------------->
+<div
+  id="heroCarousel"
+  class="relative z-10 mx-auto w-full"
+  (mouseenter)="pauseAutoPlay()"
+  (mouseleave)="resumeAutoPlay()"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)"
+>
+  <div class="relative overflow-hidden warm-shadow h-90">
+    @for (slide of slides; track slide.title; let i = $index) {
+      <div
+        class="hero-slide mx-0 absolute inset-0 flex items-center transition-opacity duration-700 ease-in-out"
+        [class.opacity-100]="i === currentSlide"
+        [class.opacity-0]="i !== currentSlide"
+        [class.pointer-events-none]="i !== currentSlide"
+        [style.background]="slide.background"
+      >
+        <div class="max-w-xl px-10 md:px-16 text-white">
+          <span class="inline-block text-xs font-bold tracking-wide text-orange-200 mb-3">{{
+            slide.eyebrow
+          }}</span>
+          <h2 class="text-3xl md:text-4xl font-bold leading-tight mb-3">{{ slide.title }}</h2>
+          <p class="text-sm md:text-base text-white/80 mb-6">{{ slide.subtitle }}</p>
+          <a
+            [href]="slide.ctaLink"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-xl transition-colors shadow-sm shadow-orange-500/20"
+          >
+            {{ slide.ctaLabel }}
+          </a>
+        </div>
+      </div>
+    }
+
+    <!-- Prev / Next -->
+    <button
+      (click)="prevSlide()"
+      aria-label="Previous slide"
+      class="absolute left-3 top-1/2 -translate-y-1/2 w-10 sm:flex hidden h-10 rounded-full bg-white/20 hover:bg-white/35 backdrop-blur-sm text-white items-center justify-center transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+      </svg>
+    </button>
+    <button
+      (click)="nextSlide()"
+      aria-label="Next slide"
+      class="absolute right-3 top-1/2 -translate-y-1/2 sm:flex hidden w-10 h-10 rounded-full bg-white/20 hover:bg-white/35 backdrop-blur-sm text-white items-center justify-center transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+      </svg>
+    </button>
+
+    <!-- Dots -->
+    <div class="absolute bottom-3 left-0 right-0 z-10 flex items-center justify-center gap-2">
+      @for (slide of slides; track slide.title; let i = $index) {
+        <button
+          (click)="goToSlide(i)"
+          [attr.aria-label]="'Go to slide ' + (i + 1)"
+          class="hero-dot h-2.5 w-2.5 rounded-full transition-all duration-300"
+          [class.bg-white]="i === currentSlide"
+          [class.w-8]="i === currentSlide"
+          [class.bg-white/40]="i !== currentSlide"
+          [class.hover:bg-white/60]="i !== currentSlide"
+          [class.w-2.5]="i !== currentSlide"
+        ></button>
+      }
+    </div>
+  </div>
+</div>
+<!-- --------------- Offers -------------- -->
+
+<section class="relative overflow-hidden bg-emerald-950 py-12 lg:py-16 mt-8">
+  <!-- decorative glow -->
+  <div class="absolute -top-24 -right-24 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mb-8 lg:mb-10">
+      <div class="flex items-center gap-3">
+        <span
+          class="w-10 h-10 rounded-2xl bg-orange-500/15 flex items-center justify-center text-orange-400 shrink-0"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 7.5 7.5 0 0 0 12 21a7.5 7.5 0 0 0 3.362-15.786z"
+            />
+          </svg>
+        </span>
+        <div>
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <h2 class="text-xl lg:text-2xl font-bold text-white tracking-tight">Flash Deals</h2>
+            <span
+              class="px-2.5 py-1 rounded-full bg-orange-500 text-white text-[11px] font-bold uppercase tracking-wide"
+            >
+              Up to 50% OFF
+            </span>
+          </div>
+          <p class="text-emerald-200/70 text-sm mt-1">Grab them before the clock runs out</p>
+        </div>
+      </div>
+
+      <!-- Countdown -->
+      <div class="flex items-center gap-2">
+        <div class="flex flex-col items-center bg-white/10 rounded-xl px-3 py-2 min-w-14">
+          <span class="text-white text-lg lg:text-xl font-bold tabular-nums leading-none">{{
+            dealHours() | number: '2.0-0'
+          }}</span>
+          <span class="text-emerald-200/60 text-2xs uppercase tracking-wide mt-1">Hours</span>
+        </div>
+        <span class="text-orange-400 text-lg font-bold">:</span>
+        <div class="flex flex-col items-center bg-white/10 rounded-xl px-3 py-2 min-w-14">
+          <span class="text-white text-lg lg:text-xl font-bold tabular-nums leading-none">{{
+            dealMinutes() | number: '2.0-0'
+          }}</span>
+          <span class="text-emerald-200/60 text-2xs uppercase tracking-wide mt-1">Min</span>
+        </div>
+        <span class="text-orange-400 text-lg font-bold">:</span>
+        <div class="flex flex-col items-center bg-orange-500 rounded-xl px-3 py-2 min-w-14">
+          <span class="text-white text-lg lg:text-xl font-bold tabular-nums leading-none">{{
+            dealSeconds() | number: '2.0-0'
+          }}</span>
+          <span class="text-white/70 text-2xs uppercase tracking-wide mt-1">Sec</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deals Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      @for (deal of deals; track deal.id) {
+        <article
+          class="group bg-white rounded-3xl overflow-hidden warm-shadow hover:shadow-lg transition-shadow duration-300 flex flex-col"
+        >
+          <!-- Image -->
+          <div class="relative aspect-square bg-stone-100 overflow-hidden">
+            <img
+              [src]="deal.image"
+              [alt]="deal.name"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <span
+              class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-2xs font-bold text-white bg-linear-to-r from-orange-500 to-orange-600 shadow-sm shadow-orange-500/30"
+            >
+              -{{ deal.discountPercent }}%
+            </span>
+          </div>
+
+          <!-- Info -->
+          <div class="p-3.5 lg:p-4 flex flex-col flex-1">
+            <h3
+              class="text-sm lg:text-base font-semibold text-emerald-950 leading-snug mb-2 line-clamp-2"
+            >
+              {{ deal.name }}
+            </h3>
+
+            <!-- Price -->
+            <div class="flex items-baseline gap-1.5 mb-2.5">
+              <span class="text-sm lg:text-base font-bold text-emerald-950"
+                >{{ deal.price }} EGP</span
+              >
+              <span class="text-xs text-stone-400 line-through">{{ deal.oldPrice }} EGP</span>
+            </div>
+
+            <!-- Claimed progress (urgency touch) -->
+            <div class="mt-auto">
+              <div class="h-1.5 rounded-full bg-stone-100 overflow-hidden">
+                <div
+                  class="h-full bg-orange-500 rounded-full"
+                  [style.width.%]="deal.claimedPercent"
+                ></div>
+              </div>
+              <span class="text-2xs text-stone-400 mt-1 block"
+                >{{ deal.claimedPercent }}% claimed</span
+              >
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,331 @@
+<!-- Checkout Page -->
+
+<section class="bg-brand-bg min-h-screen py-8 lg:py-10">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs text-slate-400 mb-4">
+      <a
+        routerLink="/"
+        class="hover:text-brand-secondary font-bold transition-colors cursor-pointer"
+        >Home</a
+      >
+      <i class="fa-solid fa-chevron-right text-[9px]"></i>
+      <a
+        routerLink="/cart"
+        class="hover:text-brand-secondary transition-colors cursor-pointer font-bold"
+        >Cart</a
+      >
+      <i class="fa-solid fa-chevron-right text-[9px]"></i>
+      <span class="text-brand-dark cursor-pointer font-bold">Checkout</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="flex items-start justify-between mb-8">
+      <div class="flex items-center gap-3">
+        <span
+          class="w-11 h-11 rounded-2xl bg-gradient-to-r from-brand-primary to-brand-secondary text-white flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-bag-shopping text-lg"></i>
+        </span>
+        <div>
+          <h1 class="text-xl lg:text-2xl font-bold text-brand-dark tracking-tight">
+            Complete Your Order
+          </h1>
+          <p class="text-sm text-slate-500 mt-0.5">Review your items and complete your purchase</p>
+        </div>
+      </div>
+      <a
+        routerLink="/cart"
+        class="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:text-brand-secondary transition-colors mt-2 cursor-pointer"
+      >
+        <i class="fa-solid fa-arrow-left text-xs"></i>
+        Back to Cart
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <!-- Left Column -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Shipping Address -->
+        <div
+          class="bg-brand-surface rounded-3xl shadow-lg shadow-brand-dark/5 border border-slate-200/70 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-brand-primary to-brand-secondary px-5 sm:px-6 py-4 flex items-center gap-3"
+          >
+            <span class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-location-dot text-white text-sm"></i>
+            </span>
+            <div>
+              <h2 class="text-white font-bold text-sm sm:text-base leading-none">
+                Shipping Address
+              </h2>
+              <p class="text-white/75 text-xs mt-1">Where should we deliver your order?</p>
+            </div>
+          </div>
+
+          <div class="p-5 sm:p-6 space-y-4">
+            <!-- Info banner -->
+            <div
+              class="flex gap-3 rounded-2xl bg-brand-primary/5 border border-brand-primary/15 px-4 py-3"
+            >
+              <i class="fa-solid fa-circle-info text-brand-secondary mt-0.5"></i>
+              <p class="text-xs text-brand-dark leading-relaxed">
+                <span class="font-bold">Delivery information</span><br />
+                Please make sure your address is accurate for smooth delivery.
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="city">
+                City <span class="text-brand-danger">*</span>
+              </label>
+              <div class="relative">
+                <i
+                  class="fa-solid fa-city absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"
+                ></i>
+                <input
+                  id="city"
+                  type="text"
+                  placeholder="e.g. Cairo, Alexandria, Giza"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-3.5 py-2.5 text-sm text-brand-dark placeholder:text-slate-400 outline-none focus:border-brand-primary focus:bg-brand-surface transition-colors"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="street">
+                Street Address <span class="text-brand-danger">*</span>
+              </label>
+              <div class="relative">
+                <i
+                  class="fa-solid fa-map-location-dot absolute left-3.5 top-3 text-slate-400 text-sm"
+                ></i>
+                <textarea
+                  id="street"
+                  rows="2"
+                  placeholder="Street name, building number, floor, apartment..."
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-3.5 py-2.5 text-sm text-brand-dark placeholder:text-slate-400 outline-none focus:border-brand-primary focus:bg-brand-surface transition-colors resize-none"
+                ></textarea>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="phone">
+                Phone Number <span class="text-brand-danger">*</span>
+              </label>
+              <div class="relative">
+                <i
+                  class="fa-solid fa-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"
+                ></i>
+                <input
+                  id="phone"
+                  type="tel"
+                  placeholder="01xxxxxxxxx"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-28 py-2.5 text-sm text-brand-dark placeholder:text-slate-400 outline-none focus:border-brand-primary focus:bg-brand-surface transition-colors"
+                />
+                <span
+                  class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-400"
+                >
+                  Egyptian numbers only
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Payment Method -->
+
+        <!-- Cash on Delivery -->
+        <label
+          class="group flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-200 cursor-pointer bg-white transition-all duration-200 has-checked:border-brand-primary has-checked:bg-brand-primary/5"
+        >
+          <!-- Icon -->
+          <span
+            class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 transition-colors duration-200 group-has-checked:bg-gradient-to-r from-brand-primary to-brand-secondary group-has-checked:text-white"
+          >
+            <i class="fa-solid fa-money-bill-wave"></i>
+          </span>
+
+          <!-- Text -->
+          <span class="flex-1 min-w-0">
+            <span
+              class="block text-sm font-bold text-brand-dark group-has-checked:text-brand-primary"
+            >
+              Cash on Delivery
+            </span>
+
+            <span class="block text-xs text-slate-500 mt-0.5">
+              Pay when your order arrives at your doorstep
+            </span>
+          </span>
+
+          <!-- Radio -->
+          <input
+            type="radio"
+            name="paymentMethod"
+            value="cash"
+            checked
+            (change)="isPayOnline.set(false)"
+            class="sr-only"
+          />
+
+          <!-- Circle -->
+          <span
+            class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center shrink-0 transition-all duration-200 group-has-checked:border-brand-primary"
+          >
+            <span
+              class="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary scale-0 transition-transform duration-200 group-has-checked:scale-100"
+            ></span>
+          </span>
+        </label>
+
+        <!-- Pay Online -->
+        <label
+          class="group flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-200 cursor-pointer bg-white transition-all duration-200 has-checked:border-brand-primary has-checked:bg-brand-primary/5"
+        >
+          <!-- Icon -->
+          <span
+            class="w-11 h-11 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 transition-colors duration-200 group-has-checked:bg-gradient-to-r from-brand-primary to-brand-secondary group-has-checked:text-white"
+          >
+            <i class="fa-solid fa-credit-card"></i>
+          </span>
+
+          <!-- Text -->
+          <span class="flex-1 min-w-0">
+            <span
+              class="block text-sm font-bold text-brand-dark group-has-checked:text-brand-primary"
+            >
+              Pay Online
+            </span>
+
+            <span class="block text-xs text-slate-500 mt-0.5">
+              Secure payment with Credit/Debit Card via Stripe
+            </span>
+
+            <span class="flex items-center gap-1.5 mt-1.5">
+              <i class="fa-brands fa-cc-visa text-slate-400 text-base"></i>
+              <i class="fa-brands fa-cc-mastercard text-slate-400 text-base"></i>
+              <i class="fa-brands fa-cc-amex text-slate-400 text-base"></i>
+            </span>
+          </span>
+
+          <!-- Radio -->
+          <input
+            type="radio"
+            (change)="isPayOnline.set(true)"
+            name="paymentMethod"
+            value="card"
+            class="sr-only"
+          />
+
+          <!-- Circle -->
+          <span
+            class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center shrink-0 transition-all duration-200 group-has-checked:border-brand-primary"
+          >
+            <span
+              class="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary scale-0 transition-transform duration-200 group-has-checked:scale-100"
+            ></span>
+          </span>
+        </label>
+      </div>
+
+      <!-- Right Column: Order Summary -->
+      <div
+        class="bg-brand-surface rounded-3xl shadow-lg shadow-brand-dark/5 border border-slate-200/70 overflow-hidden lg:sticky lg:top-6"
+      >
+        <div
+          class="bg-gradient-to-r from-brand-primary to-brand-secondary px-5 sm:px-6 py-4 flex items-center gap-3"
+        >
+          <span class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-receipt text-white text-sm"></i>
+          </span>
+          <div>
+            <h2 class="text-white font-bold text-sm sm:text-base leading-none">Order Summary</h2>
+            <p class="text-white/75 text-xs mt-1">{{ cartdetail().data.products.length }} items</p>
+          </div>
+        </div>
+
+        <div class="p-5 sm:p-6">
+          <!-- Items -->
+          <div class="space-y-3 mb-5">
+            @for (cartItem of cartdetail().data.products; track cartItem._id) {
+              <div class="flex items-center gap-3">
+                <img
+                  [src]="cartItem.product.imageCover"
+                  alt="Product"
+                  class="w-12 h-12 rounded-xl object-cover bg-slate-100 shrink-0"
+                />
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-brand-dark truncate">
+                    {{ cartItem.product.category.name }}
+                  </p>
+                  <p class="text-xs text-slate-400">
+                    {{ cartItem.count }} × {{ cartItem.price }} EGP
+                  </p>
+                </div>
+                <span class="text-sm font-bold text-brand-dark shrink-0"
+                  >{{ cartItem.price * cartItem.count }} EGP</span
+                >
+              </div>
+            }
+          </div>
+
+          <div class="h-px bg-slate-200 mb-4"></div>
+
+          <div class="space-y-2.5 text-sm mb-4">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">Subtotal</span>
+              <span class="font-semibold text-brand-dark"
+                >{{ cartdetail().data.totalCartPrice }} EGP</span
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500 flex items-center gap-1.5">
+                <i class="fa-solid fa-truck-fast text-xs"></i> Shipping
+              </span>
+              <span class="font-semibold text-brand-dark">50 EGP</span>
+            </div>
+          </div>
+
+          <div class="h-px bg-slate-200 mb-4"></div>
+
+          <div class="flex items-center justify-between mb-6">
+            <span class="text-base font-bold text-brand-dark">Total</span>
+            <span class="text-2xl font-bold text-brand-secondary"
+              >{{ total() }} <span class="text-sm font-semibold">EGP</span></span
+            >
+          </div>
+          @if (isPayOnline() == true) {
+            <button
+              (click)="checkoutSession()"
+              class="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-brand-primary to-brand-secondary hover:from-brand-secondary hover:to-brand-primary text-white font-bold rounded-xl transition-all shadow-sm active:scale-[0.99]"
+            >
+              <i class="fa-solid fa-shield-halved"></i>
+              Proceed to Payment
+            </button>
+          } @else {
+            <button
+              (click)="cashOrder()"
+              class="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-brand-primary to-brand-secondary hover:from-brand-secondary hover:to-brand-primary text-white font-bold rounded-xl transition-all shadow-sm active:scale-[0.99]"
+            >
+              <i class="fa-solid fa-shield-halved"></i>
+              Place Order
+            </button>
+          }
+
+          <div class="flex items-center justify-center gap-4 mt-5 flex-wrap">
+            <span class="flex items-center gap-1.5 text-[11px] text-slate-400">
+              <i class="fa-solid fa-shield-halved text-brand-primary"></i> Secure
+            </span>
+            <span class="flex items-center gap-1.5 text-[11px] text-slate-400">
+              <i class="fa-solid fa-truck text-brand-primary"></i> Fast Delivery
+            </span>
+            <span class="flex items-center gap-1.5 text-[11px] text-slate-400">
+              <i class="fa-solid fa-rotate-left text-brand-secondary"></i> Easy Returns
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

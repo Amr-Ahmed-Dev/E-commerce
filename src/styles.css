@@ -1,3 +1,271 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+@import 'flowbite/src/themes/default';
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+/* Required base styles for ngx-toastr — without this the toast container
+   has no position/z-index and won't display correctly (or at all) */
+@import 'ngx-toastr/toastr';
+
+@theme {
+  --color-cream-primary: #064e3b;
+  --color-cream-accent: #f97316;
+  --color-cream-surface: #ffffff;
+  --color-cream-bg: #fafaf9;
+  --color-cream-text: #022c22;
+  --color-cream-danger: #e11d48;
+}
+@theme {
+  --color-brand-primary: #2563eb; /* Blue — from the logo's top-left gradient */
+  --color-brand-secondary: #9333ea; /* Purple — from the logo's bottom-right gradient */
+  --color-brand-dark: #0f172a; /* Navy — matches the "SHOPPING ZONE" wordmark */
+  --color-brand-surface: #ffffff;
+  --color-brand-bg: #f8fafc;
+  --color-brand-danger: #e11d48;
+}
+@property --toast-progress {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes toast-ring-progress {
+  to {
+    --toast-progress: 1;
+  }
+}
+
+@keyframes toast-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.toast-container.toast-top-right {
+  top: 1.25rem;
+  right: 1.25rem;
+  left: auto;
+  bottom: auto;
+  width: min(390px, calc(100vw - 32px));
+  transform: none;
+}
+
+.toast-container.toast-top-right .ngx-toastr {
+  width: 100%;
+  margin: 0;
+}
+
+.app-toast {
+  --toast-accent: var(--color-brand-primary, #2563eb);
+  --toast-accent-soft: rgba(37, 99, 235, 0.09);
+  position: relative;
+  display: flex !important;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  padding: 18px 20px;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--color-brand-dark, #0f172a);
+  background: var(--color-brand-surface, #fff);
+  background-image: none;
+  border: 1px solid color-mix(in srgb, var(--toast-accent) 22%, white);
+  border-radius: 20px;
+  box-shadow:
+    0 24px 70px -26px rgba(15, 23, 42, 0.38),
+    0 8px 24px -16px rgba(37, 99, 235, 0.28);
+  opacity: 1;
+  animation: toast-pop-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition:
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.app-toast::before {
+  content: '';
+  position: relative;
+  z-index: 1;
+  display: block;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  margin-top: 1px;
+  border-radius: 14px;
+  background-color: var(--toast-accent);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 21px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 5px 12px -7px var(--toast-accent);
+}
+
+.app-toast:hover {
+  box-shadow:
+    0 28px 76px -25px rgba(15, 23, 42, 0.42),
+    0 10px 28px -16px var(--toast-accent);
+}
+
+.app-toast-title,
+.app-toast-message {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding-right: 16px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.app-toast-title {
+  margin: 1px 0 4px;
+  color: var(--color-brand-dark, #0f172a);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.app-toast-message {
+  color: #475569;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.app-toast .toast-close-button {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  color: #64748b;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  text-shadow: none;
+  opacity: 0.75;
+  transition:
+    color 150ms ease,
+    opacity 150ms ease,
+    background-color 150ms ease;
+}
+
+.app-toast .toast-close-button:hover {
+  color: var(--toast-accent);
+  opacity: 1;
+}
+
+.app-toast .toast-progress {
+  display: none;
+}
+
+.app-toast::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from -90deg,
+    var(--toast-accent) calc(var(--toast-progress) * 1turn),
+    transparent 0
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: toast-ring-progress 3.5s linear forwards;
+}
+
+.app-toast.toast-success {
+  --toast-accent: #16a34a;
+  --toast-accent-soft: rgba(22, 163, 74, 0.1);
+}
+
+.app-toast.toast-success::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 12.75 6 6 9-13.5'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 12.75 6 6 9-13.5'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+}
+
+.app-toast.toast-error {
+  --toast-accent: var(--color-brand-danger, #e11d48);
+  --toast-accent-soft: rgba(225, 29, 72, 0.09);
+}
+
+.app-toast.toast-error::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18 18 6M6 6l12 12'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18 18 6M6 6l12 12'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+}
+
+.app-toast.toast-warning {
+  --toast-accent: #d97706;
+  --toast-accent-soft: rgba(217, 119, 6, 0.1);
+}
+
+.app-toast.toast-warning::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 9v3.75m-9.303 3.376C1.83 17.7 2.767 19.5 4.323 19.5h15.354c1.556 0 2.492-1.8 1.626-3.374L13.626 4.25c-.775-1.4-2.477-1.4-3.252 0l-7.677 11.876ZM12 15.75h.007v.008H12v-.008Z'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 9v3.75m-9.303 3.376C1.83 17.7 2.767 19.5 4.323 19.5h15.354c1.556 0 2.492-1.8 1.626-3.374L13.626 4.25c-.775-1.4-2.477-1.4-3.252 0l-7.677 11.876ZM12 15.75h.007v.008H12v-.008Z'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+}
+
+.app-toast.toast-info {
+  --toast-accent: var(--color-brand-primary, #2563eb);
+  --toast-accent-soft: rgba(37, 99, 235, 0.09);
+}
+
+.app-toast.toast-info::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25h1.5V17h-1.5V11.25ZM12 8.25h.008v.008H12V8.25Z'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25h1.5V17h-1.5V11.25ZM12 8.25h.008v.008H12V8.25Z'/%3E%3C/svg%3E")
+    center / 21px no-repeat;
+}
+
+@media (max-width: 480px) {
+  .toast-container.toast-center-center {
+    width: calc(100vw - 24px);
+  }
+
+  .app-toast {
+    gap: 11px;
+    padding: 15px 16px;
+    border-radius: 17px;
+  }
+
+  .app-toast::before {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-toast,
+  .app-toast::after {
+    animation: none;
+    transition: none;
+  }
+}

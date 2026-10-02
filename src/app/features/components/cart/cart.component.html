@@ -1,0 +1,418 @@
+<section class="min-h-screen bg-brand-bg py-10 lg:py-14">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-brand-dark lg:text-3xl">Shopping Cart</h1>
+        <p class="mt-1 text-sm text-slate-500">
+          <span class="font-bold uppercase text-brand-primary">
+            {{ cartdetail().numOfCartItems }} items
+          </span>
+          in your cart
+        </p>
+      </div>
+
+      <a
+        routerLink="/"
+        class="hidden items-center gap-1.5 text-sm font-semibold text-brand-primary transition-colors hover:text-brand-secondary sm:flex"
+      >
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+          />
+        </svg>
+        Continue Shopping
+      </a>
+    </div>
+
+    @if (cartdetail().numOfCartItems == 0) {
+      <div class="flex flex-col items-center justify-center px-4 py-20 text-center lg:py-28">
+        <div
+          class="mb-6 flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary/10 to-brand-secondary/10 lg:h-32 lg:w-32"
+        >
+          <svg
+            class="h-14 w-14 text-brand-primary/50 lg:h-16 lg:w-16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"
+            />
+          </svg>
+        </div>
+
+        <h2 class="mb-2 text-xl font-bold tracking-tight text-brand-dark lg:text-2xl">
+          Your cart is empty
+        </h2>
+        <p class="mb-7 max-w-sm text-sm text-slate-500">
+          Looks like you haven't added anything to your cart yet. Explore our products and find
+          something you'll love.
+        </p>
+
+        <a
+          routerLink="/"
+          class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary px-7 py-3 text-sm font-bold text-white shadow-sm shadow-brand-primary/20 transition-all hover:brightness-110 active:scale-[0.99]"
+        >
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"
+            />
+          </svg>
+          Start Shopping
+        </a>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-3 lg:gap-8">
+        <div class="space-y-4 lg:col-span-2">
+          @if (cartdetail()?.data; as data) {
+            @for (cartItem of data.products; track cartItem._id) {
+              <div
+                class="flex gap-4 rounded-3xl border border-slate-200 bg-brand-surface p-4 shadow-sm sm:p-5"
+              >
+                <img
+                  [src]="cartItem.product.imageCover"
+                  [alt]="cartItem.product.title"
+                  class="h-20 w-20 shrink-0 rounded-2xl bg-brand-bg object-cover sm:h-24 sm:w-24"
+                />
+
+                <div class="flex min-w-0 flex-1 flex-col">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <span
+                        class="text-[10px] font-semibold uppercase tracking-wide text-brand-primary"
+                      >
+                        {{ cartItem.product.category.name }}
+                      </span>
+                      <h3
+                        class="truncate text-sm font-semibold leading-snug text-brand-dark sm:text-base"
+                      >
+                        {{ cartItem.product.title }}
+                      </h3>
+                    </div>
+
+                    <button
+                      type="button"
+                      (click)="removeItemFromCart(cartItem.product.id, cartItem.product.title)"
+                      aria-label="Remove item"
+                      class="shrink-0 cursor-pointer rounded-lg p-2 text-brand-danger transition-colors hover:bg-brand-danger hover:text-white"
+                    >
+                      <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="mt-auto flex items-end justify-between pt-2">
+                    <div
+                      class="flex items-center gap-3 rounded-xl border border-slate-200 bg-brand-bg p-1"
+                    >
+                      <button
+                        type="button"
+                        [disabled]="
+                          updatingItem()?.productId === cartItem.product.id &&
+                          updatingItem()?.action === 'decrease'
+                        "
+                        (click)="
+                          updateCartItemQuantity(
+                            cartItem.count - 1,
+                            cartItem.product.id,
+                            'decrease'
+                          )
+                        "
+                        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded bg-brand-primary/10 text-brand-dark transition-colors hover:bg-brand-primary/20 disabled:cursor-not-allowed disabled:opacity-70"
+                        aria-label="Decrease quantity"
+                      >
+                        @if (
+                          updatingItem()?.productId === cartItem.product.id &&
+                          updatingItem()?.action === 'decrease'
+                        ) {
+                          <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+                        } @else {
+                          <i class="fa-solid fa-minus text-xs"></i>
+                        }
+                      </button>
+
+                      <span class="w-4 text-center text-sm font-semibold text-brand-dark">
+                        {{ cartItem.count }}
+                      </span>
+
+                      <button
+                        type="button"
+                        [disabled]="
+                          updatingItem()?.productId === cartItem.product.id &&
+                          updatingItem()?.action === 'increase'
+                        "
+                        (click)="
+                          updateCartItemQuantity(
+                            cartItem.count + 1,
+                            cartItem.product.id,
+                            'increase'
+                          )
+                        "
+                        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded bg-gradient-to-r from-brand-primary to-brand-secondary text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
+                        aria-label="Increase quantity"
+                      >
+                        @if (
+                          updatingItem()?.productId === cartItem.product.id &&
+                          updatingItem()?.action === 'increase'
+                        ) {
+                          <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+                        } @else {
+                          <i class="fa-solid fa-plus text-xs"></i>
+                        }
+                      </button>
+                    </div>
+
+                    <div class="text-right">
+                      <span class="text-sm font-bold text-brand-dark sm:text-base">
+                        {{ cartItem.price * cartItem.count }} EGP
+                      </span>
+                      <span class="block text-[13px] font-bold text-brand-primary">
+                        {{ cartItem.price }} EGP
+                        <span class="font-bold text-brand-secondary">each</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          }
+
+          <div
+            class="mb-5 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-brand-surface px-4 py-3"
+          >
+            <div class="flex items-center gap-2">
+              <span
+                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary"
+              >
+                <svg
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272"
+                  />
+                </svg>
+              </span>
+              <p class="text-sm font-bold text-brand-dark">
+                Cart Items
+                <span class="font-semibold text-slate-400"
+                  >({{ cartdetail().numOfCartItems }})</span
+                >
+              </p>
+            </div>
+
+            <button
+              type="button"
+              (click)="clearCartItems()"
+              aria-label="Clear all items"
+              class="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-brand-danger/20 bg-brand-danger/5 px-4 py-2 text-sm font-bold text-brand-danger transition-all hover:border-brand-danger hover:bg-brand-danger hover:text-white active:scale-[0.98]"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                />
+              </svg>
+              Clear All
+            </button>
+          </div>
+
+          <div
+            class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-brand-surface p-4 sm:flex-row sm:items-center"
+          >
+            <div
+              class="flex flex-1 items-center gap-2.5 rounded-xl border border-slate-200 bg-brand-bg px-3.5 py-2.5"
+            >
+              <svg
+                class="h-4 w-4 shrink-0 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.83.699 2.528 0l4.917-4.917a1.79 1.79 0 0 0 0-2.528l-9.581-9.581A2.25 2.25 0 0 0 9.568 3z"
+                />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Enter promo code"
+                class="w-full border-none bg-transparent text-sm text-brand-dark outline-none placeholder:text-slate-400 focus:ring-0"
+              />
+            </div>
+
+            <button
+              type="button"
+              class="shrink-0 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="rounded-3xl border border-slate-200 bg-brand-surface p-5 shadow-sm sm:p-6 lg:sticky lg:top-6"
+        >
+          <h2 class="mb-5 text-lg font-bold tracking-tight text-brand-dark">Order Summary</h2>
+
+          <div class="space-y-3 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">Subtotal ({{ cartdetail().numOfCartItems }})</span>
+              <span class="font-semibold text-brand-dark">
+                {{ cartdetail()?.data?.totalCartPrice ?? 0 }} EGP
+              </span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">Shipping</span>
+              <span class="font-semibold text-brand-dark">30 EGP</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">Discount</span>
+              <span class="font-semibold text-brand-danger">-23 EGP</span>
+            </div>
+          </div>
+
+          <div class="my-4 h-px bg-slate-200"></div>
+
+          <div class="mb-6 flex items-center justify-between">
+            <span class="text-lg font-bold text-brand-dark">Total</span>
+            <span class="text-xl font-bold text-brand-primary">
+              {{ cartdetail()?.data?.totalCartPrice ?? 0 }} EGP
+            </span>
+          </div>
+
+          <button
+            type="button"
+            [routerLink]="['/checkout', cartdetail().cartId]"
+            class="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary py-3.5 text-sm font-bold text-white shadow-sm shadow-brand-primary/20 transition-all hover:brightness-110 active:scale-[0.99]"
+          >
+            Proceed to Checkout
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <svg
+              class="h-3.5 w-3.5 text-brand-primary"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+              />
+            </svg>
+            <span class="text-[11px] text-slate-400">Secure checkout, 100% protected</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<div class="border-t border-brand-primary/10 bg-brand-bg">
+  <div class="mx-auto grid max-w-5xl grid-cols-2 gap-4 px-4 py-5 sm:grid-cols-4">
+    <div class="flex items-center gap-2.5">
+      <span
+        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary"
+      >
+        <i class="fa-solid fa-truck-fast text-sm"></i>
+      </span>
+      <div>
+        <p class="text-xs font-bold leading-none text-brand-dark">Free Shipping</p>
+        <p class="mt-1 text-[10px] text-slate-500">On orders over 500 EGP</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <span
+        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-secondary/10 text-brand-secondary"
+      >
+        <i class="fa-solid fa-rotate-left text-sm"></i>
+      </span>
+      <div>
+        <p class="text-xs font-bold leading-none text-brand-dark">Easy Returns</p>
+        <p class="mt-1 text-[10px] text-slate-500">14-day return policy</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <span
+        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary"
+      >
+        <i class="fa-solid fa-shield-halved text-sm"></i>
+      </span>
+      <div>
+        <p class="text-xs font-bold leading-none text-brand-dark">Secure Payment</p>
+        <p class="mt-1 text-[10px] text-slate-500">100% secure checkout</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <span
+        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-secondary/10 text-brand-secondary"
+      >
+        <i class="fa-solid fa-clock text-sm"></i>
+      </span>
+      <div>
+        <p class="text-xs font-bold leading-none text-brand-dark">24/7 Support</p>
+        <p class="mt-1 text-[10px] text-slate-500">Contact us anytime</p>
+      </div>
+    </div>
+  </div>
+</div>

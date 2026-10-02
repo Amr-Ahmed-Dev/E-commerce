@@ -1,0 +1,53 @@
+<div
+  class="min-h-screen bg-cream-bgtext-cream-text flex items-center justify-center px-6 relative overflow-hidden"
+>
+  <!-- Modern Background Glow Effects -->
+  <div
+    class="absolute -top-32 -left-32 w-96 h-96 bg-cream-primary/10 rounded-full blur-3xl pointer-events-none"
+  ></div>
+  <div
+    class="absolute -bottom-32 -right-32 w-96 h-96 bg-cream-accent/10 rounded-full blur-3xl pointer-events-none"
+  ></div>
+
+  <div class="max-w-xl w-full text-center relative z-10">
+    <!-- Large Styled Error Code -->
+    <div class="relative">
+      <h1 class="text-9xl font-black tracking-widest text-cream-primary/20 select-none">404</h1>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span
+          class="text-3xl md:text-4xl font-extrabold text-cream-primary tracking-wide bg-cream-surface/80 backdrop-blur-md px-6 py-2 rounded-2xl shadow-sm border border-[var(--color-cream-primary)]/10"
+        >
+          Page Not Found
+        </span>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <p class="mt-8 text-lg text-cream-text/70 max-w-md mx-auto leading-relaxed">
+      Oops! The page you are looking for might have been removed, had its name changed, or is
+      temporarily unavailable.
+    </p>
+
+    <!-- Action Buttons -->
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        routerLink="/"
+        class="w-full sm:w-auto px-8 py-4 rounded-xl bg-cream-primary text-cream-surface font-semibold shadow-lg shadow-(--color-cream-primary)/20 hover:opacity-95 hover:scale-[1.02] transition-all duration-300 text-center cursor-pointer"
+      >
+        Back to Home
+      </a>
+
+      <button
+        onclick="history.back()"
+        class="w-full sm:w-auto px-8 cursor-pointer py-4 rounded-xl bg-cream-surface text-cream-text font-semibold border border-cream-text/10 shadow-sm hover:bg-cream-text/5 transition-all duration-300"
+      >
+        Previous Page
+      </button>
+    </div>
+
+    <!-- Footer Code Info -->
+    <div class="mt-16 text-xs text-cream-text/40 tracking-wider uppercase font-medium">
+      Error Code: 404_NOT_FOUND
+    </div>
+  </div>
+</div>

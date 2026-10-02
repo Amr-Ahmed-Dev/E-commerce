@@ -1,0 +1,14 @@
+@keyframes cart-icon-bump {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.35);
+  }
+}
+
+.cart-icon-bump {
+  animation: cart-icon-bump 5s ease-out;
+}

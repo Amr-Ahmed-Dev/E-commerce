@@ -1,0 +1,545 @@
+<div class="min-h-screen bg-brand-bg text-brand-dark">
+  <!-- ================= BREADCRUMB ================= -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <div class="flex items-center gap-2 text-xs text-slate-400">
+      <a href="#" class="hover:text-brand-primary transition-colors"> Home </a>
+
+      <i class="fa-solid fa-chevron-right text-[8px]"></i>
+
+      <a href="#" class="hover:text-brand-primary transition-colors">
+        {{ productDetail().category.name }}
+      </a>
+
+      <i class="fa-solid fa-chevron-right text-[8px]"></i>
+
+      <span class="text-brand-dark font-medium"> {{ productDetail().subcategory[0].slug }} </span>
+    </div>
+  </div>
+
+  <!-- ================= MAIN PRODUCT ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14 bg-brand-surface rounded-3xl border border-slate-200/70 bg-gradient-to-br from-brand-surface via-brand-surface to-brand-primary/[0.025] p-5 shadow-lg shadow-brand-dark/5 sm:p-8"
+    >
+      <!-- ================= IMAGE GALLERY ================= -->
+      <div class="grid grid-cols-1 sm:grid-cols-[88px_1fr] gap-4">
+        <!-- Thumbnails -->
+        <div class="order-2 sm:order-1 flex sm:flex-col gap-3">
+          @for (image of productDetail().images; track $index) {
+            <button
+              class="w-20 h-20 shrink-0 rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden hover:border-brand-primary transition-colors"
+            >
+              <img [src]="image" alt="Product image" class="w-full h-full object-cover" />
+            </button>
+          }
+        </div>
+        <!-- Main Image -->
+        <div
+          class="order-1 sm:order-2 relative min-h-105 rounded-3xl bg-slate-50 border border-slate-200/70 flex items-center justify-center overflow-hidden"
+        >
+          <!-- Discount -->
+          <span
+            class="absolute top-5 left-5 z-10 bg-brand-secondary text-white text-xs font-bold px-3 py-1.5 rounded-full"
+          >
+            -{{ discountPercent(productDetail()) }}%
+          </span>
+
+          <!-- Wishlist -->
+          <button
+            class="absolute top-5 right-5 z-10 w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-brand-danger hover:border-rose-200 transition-all shadow-sm"
+          >
+            <i class="fa-regular fa-heart"></i>
+          </button>
+
+          <img
+            [src]="productDetail().imageCover"
+            alt="Orca Leather Boots Anthracite"
+            class="w-full h-full object-contain p-10 hover:scale-110 transition-transform duration-500"
+          />
+        </div>
+      </div>
+
+      <!-- ================= PRODUCT INFORMATION ================= -->
+      <div class="flex flex-col justify-center">
+        <!-- Brand -->
+        <p class="text-xs uppercase tracking-[0.18em] font-bold text-brand-primary mb-3">ORCA</p>
+
+        <!-- Title -->
+        <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-brand-dark">
+          {{ productDetail().title }}
+        </h1>
+
+        <!-- Rating -->
+        <div class="flex flex-wrap items-center gap-4 mt-4">
+          <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1 text-brand-secondary">
+              <i class="fa-solid fa-star text-sm"></i>
+              <i class="fa-solid fa-star text-sm"></i>
+              <i class="fa-solid fa-star text-sm"></i>
+              <i class="fa-solid fa-star text-sm"></i>
+
+              <i class="fa-solid fa-star-half-stroke text-sm"></i>
+            </div>
+
+            <span class="text-sm font-bold"> {{ productDetail().ratingsAverage }} </span>
+          </div>
+          <span class="w-px h-4 bg-slate-200"></span>
+          <span class="text-sm text-slate-500"> {{ productDetail().reviews.length }} reviews </span>
+          <span
+            class="inline-flex items-center gap-1.5 bg-brand-primary/5 text-brand-primary text-xs font-semibold px-3 py-1.5 rounded-full"
+          >
+            <i class="fa-solid fa-circle text-[6px]"></i>
+            In Stock
+          </span>
+        </div>
+
+        <!-- Price -->
+        <div class="flex items-end gap-3 mt-7">
+          <span class="text-3xl font-extrabold text-brand-primary">
+            {{ productDetail().priceAfterDiscount }} EGP
+          </span>
+
+          <span class="text-base text-slate-400 line-through mb-1">
+            {{ productDetail().price }} EGP
+          </span>
+        </div>
+
+        <!-- Saving -->
+        <div class="mt-2">
+          <span class="text-xs font-semibold text-brand-secondary">
+            You save
+            {{
+              productDetail().price - (productDetail().priceAfterDiscount ?? productDetail().price)
+            }}
+            EGP
+          </span>
+        </div>
+
+        <!-- Description -->
+        <p class="mt-5 text-sm leading-7 text-slate-500">
+          {{ productDetail().description }}
+        </p>
+
+        <div class="h-px bg-slate-200 my-6"></div>
+
+        <!-- ================= SIZE ================= -->
+        <div class="mb-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold">Select Size</h3>
+
+            <button class="text-xs text-brand-primary font-semibold hover:underline">
+              Size Guide
+            </button>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <button
+              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
+            >
+              39
+            </button>
+
+            <button
+              class="w-14 h-10 rounded-xl bg-brand-primary text-white border border-brand-primary text-sm font-semibold"
+            >
+              40
+            </button>
+
+            <button
+              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
+            >
+              41
+            </button>
+
+            <button
+              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
+            >
+              42
+            </button>
+
+            <button
+              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
+            >
+              43
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= QUANTITY + CART ================= -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <!-- Quantity -->
+          <div class="h-12 rounded-xl border border-slate-200 bg-slate-50 flex items-center">
+            <button class="w-11 h-full text-slate-400 hover:text-brand-primary">
+              <i class="fa-solid fa-minus text-xs"></i>
+            </button>
+
+            <span class="w-10 text-center text-sm font-bold"> 1 </span>
+
+            <button class="w-11 h-full text-slate-400 hover:text-brand-primary">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Add Cart -->
+          <button
+            (click)="addItemToCart(productDetail().id, $event)"
+            class="flex-1 cursor-pointer h-12 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-white font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-secondary/25 transition shadow-md shadow-brand-primary/20"
+          >
+            <i class="fa-solid fa-cart-shopping"></i>
+            Add to Cart
+          </button>
+
+          <!-- Buy -->
+          <button
+            class="flex-1 h-12 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-white font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-secondary/25 transition"
+          >
+            <i class="fa-solid fa-bolt"></i>
+            Buy Now
+          </button>
+        </div>
+
+        <!-- Wishlist -->
+        <button
+          class="mt-3 h-11 w-full rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:text-brand-primary hover:border-brand-primary transition"
+        >
+          <i class="fa-regular fa-heart mr-2"></i>
+          Add to Wishlist
+        </button>
+        <!-- product details -->
+
+        <!-- SKU -->
+        <div class="flex items-center gap-5 mt-5 text-xs text-slate-400">
+          <span>
+            SKU:
+            <strong class="text-slate-600"> ORC-ANT-001 </strong>
+          </span>
+
+          <span>
+            Category:
+            <strong class="text-slate-600"> Shoes </strong>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 bg-white rounded-2xl border border-slate-200 overflow-hidden"
+    >
+      <!-- Feature -->
+      <div class="p-5 flex items-start gap-4 border-b sm:border-r lg:border-b-0 border-slate-200">
+        <div
+          class="w-11 h-11 rounded-xl bg-brand-primary/5 text-brand-primary flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-truck-fast"></i>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold">Free Delivery</h3>
+
+          <p class="text-xs text-slate-400 mt-1 leading-5">Free delivery on orders over 500 EGP</p>
+        </div>
+      </div>
+
+      <div class="p-5 flex items-start gap-4 border-b lg:border-b-0 lg:border-r border-slate-200">
+        <div
+          class="w-11 h-11 rounded-xl bg-brand-secondary/5 text-brand-secondary flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-rotate-left"></i>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold">Easy Returns</h3>
+
+          <p class="text-xs text-slate-400 mt-1 leading-5">Return within 30 days</p>
+        </div>
+      </div>
+
+      <div class="p-5 flex items-start gap-4 border-b sm:border-b-0 sm:border-r border-slate-200">
+        <div
+          class="w-11 h-11 rounded-xl bg-brand-primary/5 text-brand-primary flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold">Secure Payment</h3>
+
+          <p class="text-xs text-slate-400 mt-1 leading-5">100% secure checkout</p>
+        </div>
+      </div>
+
+      <div class="p-5 flex items-start gap-4">
+        <div
+          class="w-11 h-11 rounded-xl bg-brand-secondary/5 text-brand-secondary flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-headset"></i>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold">24/7 Support</h3>
+
+          <p class="text-xs text-slate-400 mt-1 leading-5">We're here whenever you need us</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DESCRIPTION ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+    <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden">
+      <!-- Tabs -->
+      <div class="flex items-center gap-8 px-6 sm:px-8 border-b border-slate-200">
+        <button class="py-5 text-sm font-bold text-brand-primary border-b-2 border-brand-primary">
+          Description
+        </button>
+
+        <button class="py-5 text-sm font-medium text-slate-400 hover:text-brand-primary transition">
+          Specifications
+        </button>
+
+        <button class="py-5 text-sm font-medium text-slate-400 hover:text-brand-primary transition">
+          Reviews (124)
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 sm:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <!-- Description -->
+          <div>
+            <h2 class="text-lg font-bold mb-4">Product Description</h2>
+
+            <p class="text-sm text-slate-500 leading-7">
+              The Orca Leather Boots Anthracite are built for people who want a combination of
+              style, comfort and durability. Made from high-quality leather with a strong rubber
+              sole, these boots are suitable for daily wear and outdoor activities.
+            </p>
+
+            <p class="text-sm text-slate-500 leading-7 mt-4">
+              The timeless anthracite color makes them easy to combine with different outfits, while
+              the padded interior provides comfortable support throughout the day.
+            </p>
+          </div>
+
+          <!-- Specifications -->
+          <div>
+            <h2 class="text-lg font-bold mb-4">Specifications</h2>
+
+            <div class="space-y-3">
+              <div class="flex justify-between py-3 border-b border-slate-200/70">
+                <span class="text-xs text-slate-400"> Brand </span>
+
+                <span class="text-xs font-semibold"> ORCA </span>
+              </div>
+
+              <div class="flex justify-between py-3 border-b border-slate-200/70">
+                <span class="text-xs text-slate-400"> Material </span>
+
+                <span class="text-xs font-semibold"> Premium Leather </span>
+              </div>
+
+              <div class="flex justify-between py-3 border-b border-slate-200/70">
+                <span class="text-xs text-slate-400"> Color </span>
+
+                <span class="text-xs font-semibold"> Anthracite </span>
+              </div>
+
+              <div class="flex justify-between py-3 border-b border-slate-200/70">
+                <span class="text-xs text-slate-400"> Sole </span>
+
+                <span class="text-xs font-semibold"> Rubber </span>
+              </div>
+
+              <div class="flex justify-between py-3">
+                <span class="text-xs text-slate-400"> SKU </span>
+
+                <span class="text-xs font-semibold"> ORC-ANT-001 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RELATED PRODUCTS ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <p class="text-xs uppercase tracking-widest font-bold text-brand-secondary mb-2">
+          You may also like
+        </p>
+
+        <h2 class="text-2xl sm:text-3xl font-bold">Related Products</h2>
+      </div>
+
+      <a
+        href="#"
+        class="hidden sm:flex items-center gap-2 text-sm font-semibold text-brand-primary hover:gap-3 transition-all"
+      >
+        View all
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </a>
+    </div>
+
+    <!-- Products -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <!-- Card 1 -->
+      <article
+        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
+      >
+        <div class="relative aspect-square bg-slate-50 overflow-hidden">
+          <span
+            class="absolute top-3 left-3 z-10 bg-brand-secondary text-white text-2xs font-bold px-2 py-1 rounded-full"
+          >
+            -18%
+          </span>
+
+          <button
+            class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-brand-danger"
+          >
+            <i class="fa-regular fa-heart text-xs"></i>
+          </button>
+
+          <img
+            src="https://images.unsplash.com/photo-1552346154-21d32810aba3?w=500"
+            alt="Sneakers"
+            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        <div class="p-4">
+          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Footwear</p>
+
+          <h3 class="text-sm font-bold mt-1 line-clamp-2">Urban Classic Sneakers</h3>
+
+          <div class="flex items-center gap-1 mt-2">
+            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
+            <span class="text-[11px] font-semibold"> 4.7 </span>
+          </div>
+
+          <div class="flex items-center justify-between mt-4">
+            <span class="text-base font-extrabold text-brand-primary"> 1,850 EGP </span>
+
+            <button
+              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
+            >
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article
+        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
+      >
+        <div class="relative aspect-square bg-slate-50 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500"
+            alt="Casual shoes"
+            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        <div class="p-4">
+          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Footwear</p>
+
+          <h3 class="text-sm font-bold mt-1 line-clamp-2">Everyday Leather Shoes</h3>
+
+          <div class="flex items-center gap-1 mt-2">
+            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
+            <span class="text-[11px] font-semibold"> 4.6 </span>
+          </div>
+
+          <div class="flex items-center justify-between mt-4">
+            <span class="text-base font-extrabold text-brand-primary"> 2,200 EGP </span>
+
+            <button
+              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
+            >
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article
+        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
+      >
+        <div class="relative aspect-square bg-slate-50 overflow-hidden">
+          <span
+            class="absolute top-3 left-3 z-10 bg-brand-secondary text-white text-2xs font-bold px-2 py-1 rounded-full"
+          >
+            -12%
+          </span>
+
+          <img
+            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+            alt="Sport shoes"
+            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        <div class="p-4">
+          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Sneakers</p>
+
+          <h3 class="text-sm font-bold mt-1 line-clamp-2">Performance Running Shoes</h3>
+
+          <div class="flex items-center gap-1 mt-2">
+            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
+            <span class="text-[11px] font-semibold"> 4.9 </span>
+          </div>
+
+          <div class="flex items-center justify-between mt-4">
+            <span class="text-base font-extrabold text-brand-primary"> 2,750 EGP </span>
+
+            <button
+              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
+            >
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article
+        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
+      >
+        <div class="relative aspect-square bg-slate-50 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?w=500"
+            alt="Leather shoes"
+            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        <div class="p-4">
+          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Shoes</p>
+
+          <h3 class="text-sm font-bold mt-1 line-clamp-2">Premium Brown Boots</h3>
+
+          <div class="flex items-center gap-1 mt-2">
+            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
+            <span class="text-[11px] font-semibold"> 4.8 </span>
+          </div>
+
+          <div class="flex items-center justify-between mt-4">
+            <span class="text-base font-extrabold text-brand-primary"> 3,250 EGP </span>
+
+            <button
+              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
+            >
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

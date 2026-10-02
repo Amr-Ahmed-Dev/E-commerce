@@ -1,0 +1,60 @@
+<button
+  type="button"
+  role="combobox"
+  class="flex w-full items-center justify-between gap-2 rounded-md text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
+  aria-haspopup="listbox"
+  [attr.aria-expanded]="open()"
+  [attr.aria-controls]="open() ? uid + '-list' : null"
+  [attr.aria-activedescendant]="open() && activeIndex() >= 0 ? uid + '-opt-' + activeIndex() : null"
+  [attr.aria-labelledby]="labelledBy()"
+  (click)="toggle()"
+>
+  <span class="truncate" [class.text-slate-400]="!selected()" [class.text-brand-dark]="selected()">
+    {{ selected()?.label ?? placeholder() }}
+  </span>
+  <svg
+    class="h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200"
+    [class.rotate-180]="open()"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    viewBox="0 0 24 24"
+  >
+    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+  </svg>
+</button>
+
+@if (open()) {
+  <!-- rounded-2xl = الحواف الدايرية | mt-3 = مسافة تحت الزرار | p-1.5 + px-3 = مسافة بين الحافة والنص -->
+  <ul
+    [id]="uid + '-list'"
+    role="listbox"
+    class="absolute left-0 right-0 top-full z-20 mt-3 max-h-56 min-w-32 overflow-y-auto rounded-2xl border border-slate-200 bg-brand-surface p-1.5 shadow-xl shadow-slate-900/10"
+  >
+    @for (item of items(); track item.value; let i = $index) {
+      <li
+        [id]="uid + '-opt-' + i"
+        role="option"
+        class="flex cursor-pointer items-center justify-between rounded-xl px-3 py-2 text-sm font-medium text-brand-dark transition-colors"
+        [class.bg-brand-primary/10]="i === activeIndex()"
+        [class.text-brand-primary]="item.value === value()"
+        [attr.aria-selected]="item.value === value()"
+        (mouseenter)="activeIndex.set(i)"
+        (click)="select(item)"
+      >
+        {{ item.label }}
+        @if (item.value === value()) {
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+          </svg>
+        }
+      </li>
+    }
+  </ul>
+}
