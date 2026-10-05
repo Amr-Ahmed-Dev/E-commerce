@@ -40,7 +40,7 @@
 @keyframes toast-pop-in {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(0.97);
+    transform: translateY(18px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -48,42 +48,63 @@
   }
 }
 
-.toast-container.toast-top-right {
-  top: 1.25rem;
-  right: 1.25rem;
-  left: auto;
-  bottom: auto;
-  width: min(390px, calc(100vw - 32px));
-  transform: none;
+@keyframes toast-pop-out {
+  to {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
-.toast-container.toast-top-right .ngx-toastr {
+/* ---------- Position: bottom center ---------- */
+.toast-container.toast-bottom-center {
+  top: auto;
+  right: auto;
+  left: 50%;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  width: min(420px, calc(100vw - 32px));
+  transform: translateX(-50%);
+}
+
+.toast-container.toast-bottom-center .ngx-toastr {
   width: 100%;
   margin: 0;
 }
 
+.toast-container.toast-bottom-center .ngx-toastr + .ngx-toastr {
+  margin-top: 10px;
+}
+
+/* ---------- Base toast (message only) ---------- */
 .app-toast {
   --toast-accent: var(--color-brand-primary, #2563eb);
   --toast-accent-soft: rgba(37, 99, 235, 0.09);
+  --toast-accent-2: var(--toast-accent);
   position: relative;
+  box-sizing: border-box;
   display: flex !important;
-  align-items: flex-start;
-  gap: 14px;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   max-width: 100%;
-  padding: 18px 20px;
+  min-height: 62px;
+  padding: 13px 18px;
   overflow: hidden;
   isolation: isolate;
   color: var(--color-brand-dark, #0f172a);
   background: var(--color-brand-surface, #fff);
   background-image: none;
   border: 1px solid color-mix(in srgb, var(--toast-accent) 22%, white);
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow:
     0 24px 70px -26px rgba(15, 23, 42, 0.38),
     0 8px 24px -16px rgba(37, 99, 235, 0.28);
   opacity: 1;
-  animation: toast-pop-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  /* Enter, then leave by itself after 3.5s (same length as the ring) */
+  animation:
+    toast-pop-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    toast-pop-out 260ms ease-in 3.5s forwards;
   transition:
     box-shadow 180ms ease,
     border-color 180ms ease;
@@ -94,15 +115,15 @@
   position: relative;
   z-index: 1;
   display: block;
-  flex: 0 0 42px;
-  width: 42px;
-  height: 42px;
-  margin-top: 1px;
-  border-radius: 14px;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
   background-color: var(--toast-accent);
+  background-image: var(--toast-icon-bg, none);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 21px;
+  background-size: 19px;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.25),
     0 5px 12px -7px var(--toast-accent);
@@ -114,37 +135,31 @@
     0 10px 28px -16px var(--toast-accent);
 }
 
-.app-toast-title,
+/* No title: the message is the whole toast */
+.app-toast-title {
+  display: none !important;
+}
+
 .app-toast-message {
   position: relative;
   z-index: 1;
   display: block;
-  padding-right: 16px;
-  text-align: left;
-  overflow-wrap: anywhere;
-}
-
-.app-toast-title {
-  margin: 1px 0 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-right: 24px;
   color: var(--color-brand-dark, #0f172a);
   font-size: 14px;
-  font-weight: 800;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-
-.app-toast-message {
-  color: #475569;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .app-toast .toast-close-button {
   position: absolute;
   z-index: 3;
-  top: 10px;
-  right: 12px;
+  top: 50%;
+  right: 10px;
   width: 26px;
   height: 26px;
   margin: 0;
@@ -156,6 +171,7 @@
   text-align: center;
   text-shadow: none;
   opacity: 0.75;
+  transform: translateY(-50%);
   transition:
     color 150ms ease,
     opacity 150ms ease,
@@ -171,6 +187,7 @@
   display: none;
 }
 
+/* Countdown ring around the toast */
 .app-toast::after {
   content: '';
   position: absolute;
@@ -181,7 +198,8 @@
   pointer-events: none;
   background: conic-gradient(
     from -90deg,
-    var(--toast-accent) calc(var(--toast-progress) * 1turn),
+    var(--toast-accent),
+    var(--toast-accent-2) calc(var(--toast-progress) * 1turn),
     transparent 0
   );
   -webkit-mask:
@@ -195,28 +213,44 @@
   animation: toast-ring-progress 3.5s linear forwards;
 }
 
+/* ---------- Types ---------- */
 .app-toast.toast-success {
-  --toast-accent: #16a34a;
-  --toast-accent-soft: rgba(22, 163, 74, 0.1);
+  --toast-accent: var(--color-brand-primary, #2563eb);
+  --toast-accent-2: var(--color-brand-secondary, #9333ea);
+  --toast-accent-soft: rgba(37, 99, 235, 0.09);
+  --toast-icon-bg: linear-gradient(135deg, var(--toast-accent), var(--toast-accent-2));
 }
 
 .app-toast.toast-success::before {
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 12.75 6 6 9-13.5'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
+    center / 19px no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 12.75 6 6 9-13.5'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
+    center / 19px no-repeat;
 }
 
 .app-toast.toast-error {
   --toast-accent: var(--color-brand-danger, #e11d48);
   --toast-accent-soft: rgba(225, 29, 72, 0.09);
+  background: color-mix(in srgb, var(--toast-accent) 9%, var(--color-brand-surface, #fff));
+  border-color: color-mix(in srgb, var(--toast-accent) 38%, white);
+  box-shadow:
+    0 24px 70px -26px rgba(15, 23, 42, 0.38),
+    0 8px 24px -16px var(--toast-accent);
+}
+
+.app-toast.toast-error .app-toast-message {
+  color: var(--color-brand-dark, #0f172a);
+  font-weight: 700;
 }
 
 .app-toast.toast-error::before {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18 18 6M6 6l12 12'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18 18 6M6 6l12 12'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
+  -webkit-mask: none;
+  mask: none;
+  border-radius: 50%;
+  background-color: var(--toast-accent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Cpath d='M12 6.5v7.5'/%3E%3Cpath d='M12 18h.01'/%3E%3C/svg%3E");
+  background-size: 22px;
+  box-shadow: 0 6px 14px -8px var(--toast-accent);
 }
 
 .app-toast.toast-warning {
@@ -226,9 +260,9 @@
 
 .app-toast.toast-warning::before {
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 9v3.75m-9.303 3.376C1.83 17.7 2.767 19.5 4.323 19.5h15.354c1.556 0 2.492-1.8 1.626-3.374L13.626 4.25c-.775-1.4-2.477-1.4-3.252 0l-7.677 11.876ZM12 15.75h.007v.008H12v-.008Z'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
+    center / 19px no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 9v3.75m-9.303 3.376C1.83 17.7 2.767 19.5 4.323 19.5h15.354c1.556 0 2.492-1.8 1.626-3.374L13.626 4.25c-.775-1.4-2.477-1.4-3.252 0l-7.677 11.876ZM12 15.75h.007v.008H12v-.008Z'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
+    center / 19px no-repeat;
 }
 
 .app-toast.toast-info {
@@ -238,27 +272,38 @@
 
 .app-toast.toast-info::before {
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25h1.5V17h-1.5V11.25ZM12 8.25h.008v.008H12V8.25Z'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
+    center / 19px no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25h1.5V17h-1.5V11.25ZM12 8.25h.008v.008H12V8.25Z'/%3E%3C/svg%3E")
-    center / 21px no-repeat;
+    center / 19px no-repeat;
+}
+
+/* ---------- Add to cart: success color + cart icon ----------
+   Keep this block AFTER .toast-success so the icon wins. */
+.app-toast.toast-cart::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'/%3E%3C/svg%3E")
+    center / 19px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'/%3E%3C/svg%3E")
+    center / 19px no-repeat;
 }
 
 @media (max-width: 480px) {
-  .toast-container.toast-center-center {
+  .toast-container.toast-bottom-center {
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
     width: calc(100vw - 24px);
   }
 
   .app-toast {
-    gap: 11px;
-    padding: 15px 16px;
-    border-radius: 17px;
+    gap: 10px;
+    min-height: 56px;
+    padding: 11px 14px;
+    border-radius: 16px;
   }
 
   .app-toast::before {
-    flex-basis: 38px;
-    width: 38px;
-    height: 38px;
-    border-radius: 13px;
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
   }
 }
 

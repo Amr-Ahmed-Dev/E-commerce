@@ -1,545 +1,408 @@
-<div class="min-h-screen bg-brand-bg text-brand-dark">
-  <!-- ================= BREADCRUMB ================= -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-    <div class="flex items-center gap-2 text-xs text-slate-400">
-      <a href="#" class="hover:text-brand-primary transition-colors"> Home </a>
+@if (productDetail(); as product) {
+  <div class="min-h-screen min-w-0 overflow-x-hidden bg-brand-bg text-brand-dark">
+    <div class="mx-auto w-full max-w-7xl min-w-0 px-3 pt-5 sm:px-6 sm:pt-6 lg:px-8">
+      <div class="flex items-center gap-2 text-xs text-slate-400">
+        <a routerLink="/" class="transition-colors hover:text-brand-primary"> Home </a>
 
-      <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
 
-      <a href="#" class="hover:text-brand-primary transition-colors">
-        {{ productDetail().category.name }}
-      </a>
+        <a routerLink="/shop" class="transition-colors hover:text-brand-primary">
+          {{ product.category?.name ?? 'Shop' }}
+        </a>
 
-      <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
 
-      <span class="text-brand-dark font-medium"> {{ productDetail().subcategory[0].slug }} </span>
+        <span class="font-medium text-brand-dark">
+          {{ product.subcategory?.[0]?.slug ?? product.title }}
+        </span>
+      </div>
     </div>
-  </div>
 
-  <!-- ================= MAIN PRODUCT ================= -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div
-      class="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-14 bg-brand-surface rounded-3xl border border-slate-200/70 bg-gradient-to-br from-brand-surface via-brand-surface to-brand-primary/[0.025] p-5 shadow-lg shadow-brand-dark/5 sm:p-8"
-    >
-      <!-- ================= IMAGE GALLERY ================= -->
-      <div class="grid grid-cols-1 sm:grid-cols-[88px_1fr] gap-4">
-        <!-- Thumbnails -->
-        <div class="order-2 sm:order-1 flex sm:flex-col gap-3">
-          @for (image of productDetail().images; track $index) {
+    <section class="mx-auto w-full max-w-7xl min-w-0 px-3 py-5 sm:px-6 sm:py-8 lg:px-8">
+      <div
+        class="grid min-w-0 grid-cols-1 gap-5 overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-brand-surface via-brand-surface to-brand-primary/[0.025] p-3 shadow-lg shadow-brand-dark/5 sm:gap-8 sm:p-6 lg:grid-cols-2 lg:p-8 xl:gap-14"
+      >
+        <div class="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-[72px_minmax(0,1fr)] sm:gap-4">
+          <div
+            class="order-2 flex min-w-0 gap-2 overflow-x-auto pb-1 sm:order-1 sm:flex-col sm:overflow-visible"
+          >
+            @for (image of product.images ?? []; track image) {
+              <button
+                type="button"
+                (click)="selectImage(image)"
+                [attr.aria-pressed]="selectedImage() === image"
+                [attr.aria-label]="'View product image'"
+                [class.border-brand-primary]="selectedImage() === image"
+                [class.ring-2]="selectedImage() === image"
+                class="h-14 w-14 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition hover:border-brand-primary sm:h-[72px] sm:w-[72px] sm:rounded-2xl"
+              >
+                <img [src]="image" [alt]="product.title" class="h-full w-full object-cover" />
+              </button>
+            }
+          </div>
+
+          <div
+            class="relative order-1 flex h-[min(72vw,360px)] min-h-[220px] min-w-0 items-center justify-center overflow-hidden rounded-2xl border border-slate-200/70 bg-slate-50 sm:order-2 sm:h-[420px] sm:max-h-[420px] sm:rounded-3xl"
+          >
+            @if (discountPercent(product) > 0) {
+              <span
+                class="absolute left-5 top-5 z-10 rounded-full bg-brand-secondary px-3 py-1.5 text-xs font-bold text-white"
+              >
+                -{{ discountPercent(product) }}%
+              </span>
+            }
+
             <button
-              class="w-20 h-20 shrink-0 rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden hover:border-brand-primary transition-colors"
+              type="button"
+              (click)="toggleWishlist()"
+              [attr.aria-pressed]="isWishlisted()"
+              [attr.aria-label]="isWishlisted() ? 'Remove from wishlist' : 'Add to wishlist'"
+              [title]="isWishlisted() ? 'Remove from wishlist' : 'Add to wishlist'"
+              class="absolute right-3 top-3 z-10 grid size-10 place-items-center rounded-full shadow-lg ring-2 ring-white transition hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary sm:right-5 sm:top-5 sm:size-11"
+              [class]="
+                isWishlisted()
+                  ? 'bg-linear-to-br from-brand-primary to-brand-secondary text-white shadow-brand-primary/30'
+                  : 'bg-white text-brand-primary shadow-slate-900/10 hover:bg-linear-to-br hover:from-brand-primary hover:to-brand-secondary hover:text-white'
+              "
             >
-              <img [src]="image" alt="Product image" class="w-full h-full object-cover" />
+              <i
+                class="fa-heart text-base sm:text-lg"
+                [class.fa-solid]="isWishlisted()"
+                [class.fa-regular]="!isWishlisted()"
+              ></i>
             </button>
+
+            <img
+              [src]="selectedImage() || product.imageCover"
+              [alt]="product.title"
+              class="max-h-full max-w-full object-contain p-4 transition-transform duration-500 hover:scale-105 sm:p-10"
+            />
+          </div>
+        </div>
+
+        <div class="flex min-w-0 flex-col justify-center">
+          <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-brand-primary">ORCA</p>
+
+          <h1 class="text-3xl font-bold leading-tight text-brand-dark sm:text-4xl">
+            {{ product.title }}
+          </h1>
+
+          <div class="mt-4 flex flex-wrap items-center gap-4">
+            <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1 text-brand-secondary">
+                @for (star of getRatingStars(product.ratingsAverage); track star) {
+                  @switch (getStarType(star, product.ratingsAverage)) {
+                    @case ('full') {
+                      <i class="fa-solid fa-star text-sm"></i>
+                    }
+
+                    @case ('half') {
+                      <i class="fa-solid fa-star-half-stroke text-sm"></i>
+                    }
+
+                    @default {
+                      <i class="fa-regular fa-star text-sm"></i>
+                    }
+                  }
+                }
+              </div>
+
+              <span class="text-sm font-bold">
+                {{ product.ratingsAverage }}
+              </span>
+            </div>
+
+            <span class="h-4 w-px bg-slate-200"></span>
+
+            <span class="text-sm text-slate-500"> {{ product.reviews?.length ?? 0 }} reviews </span>
+
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full bg-brand-primary/5 px-3 py-1.5 text-xs font-semibold text-brand-primary"
+            >
+              <i class="fa-solid fa-circle text-[6px]"></i>
+              In Stock
+            </span>
+          </div>
+
+          <div class="mt-6 flex flex-wrap items-end gap-2 sm:mt-7 sm:gap-3">
+            @if (product.priceAfterDiscount) {
+              <span class="text-3xl font-extrabold text-brand-primary">
+                {{ product.priceAfterDiscount }} EGP
+              </span>
+
+              <span class="mb-1 text-base text-slate-400 line-through">
+                {{ product.price }} EGP
+              </span>
+            } @else {
+              <span class="text-3xl font-extrabold text-brand-primary">
+                {{ product.price }} EGP
+              </span>
+            }
+          </div>
+
+          @if (product.priceAfterDiscount) {
+            <div class="mt-2">
+              <span class="text-xs font-semibold text-brand-secondary">
+                You save
+                {{ product.price - product.priceAfterDiscount }}
+                EGP
+              </span>
+            </div>
           }
-        </div>
-        <!-- Main Image -->
-        <div
-          class="order-1 sm:order-2 relative min-h-105 rounded-3xl bg-slate-50 border border-slate-200/70 flex items-center justify-center overflow-hidden"
-        >
-          <!-- Discount -->
-          <span
-            class="absolute top-5 left-5 z-10 bg-brand-secondary text-white text-xs font-bold px-3 py-1.5 rounded-full"
-          >
-            -{{ discountPercent(productDetail()) }}%
-          </span>
 
-          <!-- Wishlist -->
-          <button
-            class="absolute top-5 right-5 z-10 w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-brand-danger hover:border-rose-200 transition-all shadow-sm"
-          >
-            <i class="fa-regular fa-heart"></i>
-          </button>
+          <p class="mt-5 text-sm leading-7 text-slate-500">
+            {{ product.description }}
+          </p>
 
-          <img
-            [src]="productDetail().imageCover"
-            alt="Orca Leather Boots Anthracite"
-            class="w-full h-full object-contain p-10 hover:scale-110 transition-transform duration-500"
-          />
-        </div>
-      </div>
+          <div class="my-6 h-px bg-slate-200"></div>
 
-      <!-- ================= PRODUCT INFORMATION ================= -->
-      <div class="flex flex-col justify-center">
-        <!-- Brand -->
-        <p class="text-xs uppercase tracking-[0.18em] font-bold text-brand-primary mb-3">ORCA</p>
+          <div class="mb-6">
+            <div class="mb-3 flex items-center justify-between">
+              <h3 class="text-sm font-bold">Select Size</h3>
 
-        <!-- Title -->
-        <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-brand-dark">
-          {{ productDetail().title }}
-        </h1>
-
-        <!-- Rating -->
-        <div class="flex flex-wrap items-center gap-4 mt-4">
-          <div class="flex items-center gap-2">
-            <div class="flex items-center gap-1 text-brand-secondary">
-              <i class="fa-solid fa-star text-sm"></i>
-              <i class="fa-solid fa-star text-sm"></i>
-              <i class="fa-solid fa-star text-sm"></i>
-              <i class="fa-solid fa-star text-sm"></i>
-
-              <i class="fa-solid fa-star-half-stroke text-sm"></i>
+              <button
+                type="button"
+                class="text-xs font-semibold text-brand-primary hover:underline"
+              >
+                Size Guide
+              </button>
             </div>
 
-            <span class="text-sm font-bold"> {{ productDetail().ratingsAverage }} </span>
-          </div>
-          <span class="w-px h-4 bg-slate-200"></span>
-          <span class="text-sm text-slate-500"> {{ productDetail().reviews.length }} reviews </span>
-          <span
-            class="inline-flex items-center gap-1.5 bg-brand-primary/5 text-brand-primary text-xs font-semibold px-3 py-1.5 rounded-full"
-          >
-            <i class="fa-solid fa-circle text-[6px]"></i>
-            In Stock
-          </span>
-        </div>
+            <div class="flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="h-10 w-14 rounded-xl border border-slate-200 text-sm font-semibold transition hover:border-brand-primary hover:text-brand-primary"
+              >
+                39
+              </button>
 
-        <!-- Price -->
-        <div class="flex items-end gap-3 mt-7">
-          <span class="text-3xl font-extrabold text-brand-primary">
-            {{ productDetail().priceAfterDiscount }} EGP
-          </span>
+              <button
+                type="button"
+                class="h-10 w-14 rounded-xl border border-brand-primary bg-brand-primary text-sm font-semibold text-white"
+              >
+                40
+              </button>
 
-          <span class="text-base text-slate-400 line-through mb-1">
-            {{ productDetail().price }} EGP
-          </span>
-        </div>
+              <button
+                type="button"
+                class="h-10 w-14 rounded-xl border border-slate-200 text-sm font-semibold transition hover:border-brand-primary hover:text-brand-primary"
+              >
+                41
+              </button>
 
-        <!-- Saving -->
-        <div class="mt-2">
-          <span class="text-xs font-semibold text-brand-secondary">
-            You save
-            {{
-              productDetail().price - (productDetail().priceAfterDiscount ?? productDetail().price)
-            }}
-            EGP
-          </span>
-        </div>
+              <button
+                type="button"
+                class="h-10 w-14 rounded-xl border border-slate-200 text-sm font-semibold transition hover:border-brand-primary hover:text-brand-primary"
+              >
+                42
+              </button>
 
-        <!-- Description -->
-        <p class="mt-5 text-sm leading-7 text-slate-500">
-          {{ productDetail().description }}
-        </p>
-
-        <div class="h-px bg-slate-200 my-6"></div>
-
-        <!-- ================= SIZE ================= -->
-        <div class="mb-6">
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-sm font-bold">Select Size</h3>
-
-            <button class="text-xs text-brand-primary font-semibold hover:underline">
-              Size Guide
-            </button>
+              <button
+                type="button"
+                class="h-10 w-14 rounded-xl border border-slate-200 text-sm font-semibold transition hover:border-brand-primary hover:text-brand-primary"
+              >
+                43
+              </button>
+            </div>
           </div>
 
-          <div class="flex flex-wrap gap-2">
-            <button
-              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
+          <div class="grid md:grid-cols-4 grid-cols-3 gap-2 sm:gap-3">
+            <div
+              class="col-span-1 flex h-11 items-center justify-between rounded-xl border border-slate-200 bg-white p-1 shadow-sm sm:h-12"
             >
-              39
+              <button
+                type="button"
+                (click)="updateCartItemQuantity(quantity() - 1, product.id, 'decrease')"
+                [disabled]="
+                  quantity() <= 1 ||
+                  (updatingItem()?.productId === product.id &&
+                    updatingItem()?.action === 'decrease')
+                "
+                aria-label="Decrease quantity"
+                class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-brand-primary/10 text-brand-dark transition-colors hover:bg-brand-primary/20 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9"
+              >
+                @if (
+                  updatingItem()?.productId === product.id && updatingItem()?.action === 'decrease'
+                ) {
+                  <i class="fa-solid fa-spinner fa-spin text-[10px]"></i>
+                } @else {
+                  <i class="fa-solid fa-minus text-[10px]"></i>
+                }
+              </button>
+
+              <span class="w-5 text-center text-sm font-semibold text-brand-dark">
+                {{ quantity() }}
+              </span>
+
+              <button
+                type="button"
+                (click)="updateCartItemQuantity(quantity() + 1, product.id, 'increase')"
+                [disabled]="
+                  updatingItem()?.productId === product.id && updatingItem()?.action === 'increase'
+                "
+                aria-label="Increase quantity"
+                class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-brand-primary to-brand-secondary text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70 sm:h-9 sm:w-9"
+              >
+                @if (
+                  updatingItem()?.productId === product.id && updatingItem()?.action === 'increase'
+                ) {
+                  <i class="fa-solid fa-spinner fa-spin text-[10px]"></i>
+                } @else {
+                  <i class="fa-solid fa-plus text-[10px]"></i>
+                }
+              </button>
+            </div>
+
+            <button
+              type="button"
+              (click)="addItemToCart(product.id, $event)"
+              class="md:col-span-3 col-span-2 flex h-11 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary px-2 text-xs font-bold text-white shadow-md shadow-brand-primary/20 transition-all hover:shadow-lg hover:shadow-brand-secondary/25 active:scale-[0.99] sm:h-12 sm:gap-2 sm:px-3 sm:text-sm"
+            >
+              <i class="fa-solid fa-cart-shopping shrink-0"></i>
+
+              <span class="truncate">Add to Cart</span>
             </button>
 
             <button
-              class="w-14 h-10 rounded-xl bg-brand-primary text-white border border-brand-primary text-sm font-semibold"
+              type="button"
+              class="col-span-1 flex h-11 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-brand-primary/15 bg-brand-primary/5 px-2 text-xs font-bold text-brand-primary transition-all hover:border-brand-primary/30 hover:bg-brand-primary/10 active:scale-[0.99] sm:h-12 sm:gap-2 sm:px-3 sm:text-sm"
             >
-              40
+              <i class="fa-solid fa-bolt shrink-0"></i>
+
+              <span class="truncate">Buy Now</span>
             </button>
 
             <button
-              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
+              type="button"
+              (click)="toggleWishlist()"
+              [attr.aria-pressed]="isWishlisted()"
+              class="md:col-span-3 col-span-2 flex h-11 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-2 text-xs font-semibold text-slate-600 transition-all hover:border-brand-secondary/40 hover:bg-brand-secondary/5 hover:text-brand-secondary active:scale-[0.99] sm:h-12 sm:gap-2 sm:px-3 sm:text-sm"
             >
-              41
-            </button>
+              <i
+                class="fa-heart shrink-0"
+                [class.fa-solid]="isWishlisted()"
+                [class.fa-regular]="!isWishlisted()"
+              ></i>
 
-            <button
-              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
-            >
-              42
-            </button>
-
-            <button
-              class="w-14 h-10 rounded-xl border border-slate-200 text-sm font-semibold hover:border-brand-primary hover:text-brand-primary transition"
-            >
-              43
+              <span class="truncate">
+                {{ isWishlisted() ? 'Remove from Wishlist' : 'Add to Wishlist' }}
+              </span>
             </button>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- ================= QUANTITY + CART ================= -->
-        <div class="flex flex-col sm:flex-row gap-3">
-          <!-- Quantity -->
-          <div class="h-12 rounded-xl border border-slate-200 bg-slate-50 flex items-center">
-            <button class="w-11 h-full text-slate-400 hover:text-brand-primary">
-              <i class="fa-solid fa-minus text-xs"></i>
-            </button>
-
-            <span class="w-10 text-center text-sm font-bold"> 1 </span>
-
-            <button class="w-11 h-full text-slate-400 hover:text-brand-primary">
-              <i class="fa-solid fa-plus text-xs"></i>
-            </button>
-          </div>
-
-          <!-- Add Cart -->
+    <section class="mx-auto w-full max-w-7xl min-w-0 px-3 pb-8 sm:px-6 sm:pb-10 lg:px-8">
+      <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white">
+        <div
+          class="flex min-w-0 items-center gap-5 overflow-x-auto border-b border-slate-200 px-4 sm:gap-8 sm:px-8"
+        >
           <button
-            (click)="addItemToCart(productDetail().id, $event)"
-            class="flex-1 cursor-pointer h-12 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-white font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-secondary/25 transition shadow-md shadow-brand-primary/20"
+            type="button"
+            class="shrink-0 whitespace-nowrap border-b-2 border-brand-primary py-5 text-sm font-bold text-brand-primary"
           >
-            <i class="fa-solid fa-cart-shopping"></i>
-            Add to Cart
+            Description
           </button>
 
-          <!-- Buy -->
           <button
-            class="flex-1 h-12 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary text-white font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-secondary/25 transition"
+            type="button"
+            class="shrink-0 whitespace-nowrap py-5 text-sm font-medium text-slate-400 transition hover:text-brand-primary"
           >
-            <i class="fa-solid fa-bolt"></i>
-            Buy Now
+            Specifications
+          </button>
+
+          <button
+            type="button"
+            class="shrink-0 whitespace-nowrap py-5 text-sm font-medium text-slate-400 transition hover:text-brand-primary"
+          >
+            Reviews ({{ product.reviews?.length ?? 0 }})
           </button>
         </div>
 
-        <!-- Wishlist -->
-        <button
-          class="mt-3 h-11 w-full rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:text-brand-primary hover:border-brand-primary transition"
-        >
-          <i class="fa-regular fa-heart mr-2"></i>
-          Add to Wishlist
-        </button>
-        <!-- product details -->
+        <div class="p-6 sm:p-8">
+          <div class="grid grid-cols-1 gap-10 lg:grid-cols-2">
+            <div>
+              <h2 class="mb-4 text-lg font-bold">Product Description</h2>
 
-        <!-- SKU -->
-        <div class="flex items-center gap-5 mt-5 text-xs text-slate-400">
-          <span>
-            SKU:
-            <strong class="text-slate-600"> ORC-ANT-001 </strong>
-          </span>
+              <p class="text-sm leading-7 text-slate-500">
+                {{ product.description }}
+              </p>
+            </div>
 
-          <span>
-            Category:
-            <strong class="text-slate-600"> Shoes </strong>
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
+            <div>
+              <h2 class="mb-4 text-lg font-bold">Specifications</h2>
 
-  <!-- ================= FEATURES ================= -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 bg-white rounded-2xl border border-slate-200 overflow-hidden"
-    >
-      <!-- Feature -->
-      <div class="p-5 flex items-start gap-4 border-b sm:border-r lg:border-b-0 border-slate-200">
-        <div
-          class="w-11 h-11 rounded-xl bg-brand-primary/5 text-brand-primary flex items-center justify-center shrink-0"
-        >
-          <i class="fa-solid fa-truck-fast"></i>
-        </div>
+              <div class="space-y-3">
+                <div class="flex justify-between border-b border-slate-200/70 py-3">
+                  <span class="text-xs text-slate-400">Brand</span>
 
-        <div>
-          <h3 class="text-sm font-bold">Free Delivery</h3>
+                  <span class="text-xs font-semibold">ORCA</span>
+                </div>
 
-          <p class="text-xs text-slate-400 mt-1 leading-5">Free delivery on orders over 500 EGP</p>
-        </div>
-      </div>
+                <div class="flex justify-between border-b border-slate-200/70 py-3">
+                  <span class="text-xs text-slate-400">Category</span>
 
-      <div class="p-5 flex items-start gap-4 border-b lg:border-b-0 lg:border-r border-slate-200">
-        <div
-          class="w-11 h-11 rounded-xl bg-brand-secondary/5 text-brand-secondary flex items-center justify-center shrink-0"
-        >
-          <i class="fa-solid fa-rotate-left"></i>
-        </div>
+                  <span class="text-xs font-semibold">
+                    {{ product.category?.name ?? '—' }}
+                  </span>
+                </div>
 
-        <div>
-          <h3 class="text-sm font-bold">Easy Returns</h3>
+                <div class="flex justify-between border-b border-slate-200/70 py-3">
+                  <span class="text-xs text-slate-400">Subcategory</span>
 
-          <p class="text-xs text-slate-400 mt-1 leading-5">Return within 30 days</p>
-        </div>
-      </div>
+                  <span class="text-xs font-semibold">
+                    {{ product.subcategory?.[0]?.slug ?? '—' }}
+                  </span>
+                </div>
 
-      <div class="p-5 flex items-start gap-4 border-b sm:border-b-0 sm:border-r border-slate-200">
-        <div
-          class="w-11 h-11 rounded-xl bg-brand-primary/5 text-brand-primary flex items-center justify-center shrink-0"
-        >
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
+                <div class="flex justify-between border-b border-slate-200/70 py-3">
+                  <span class="text-xs text-slate-400">Rating</span>
 
-        <div>
-          <h3 class="text-sm font-bold">Secure Payment</h3>
+                  <span class="text-xs font-semibold">
+                    {{ product.ratingsAverage }}
+                  </span>
+                </div>
 
-          <p class="text-xs text-slate-400 mt-1 leading-5">100% secure checkout</p>
-        </div>
-      </div>
+                <div class="flex justify-between py-3">
+                  <span class="text-xs text-slate-400">Reviews</span>
 
-      <div class="p-5 flex items-start gap-4">
-        <div
-          class="w-11 h-11 rounded-xl bg-brand-secondary/5 text-brand-secondary flex items-center justify-center shrink-0"
-        >
-          <i class="fa-solid fa-headset"></i>
-        </div>
-
-        <div>
-          <h3 class="text-sm font-bold">24/7 Support</h3>
-
-          <p class="text-xs text-slate-400 mt-1 leading-5">We're here whenever you need us</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= DESCRIPTION ================= -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-    <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden">
-      <!-- Tabs -->
-      <div class="flex items-center gap-8 px-6 sm:px-8 border-b border-slate-200">
-        <button class="py-5 text-sm font-bold text-brand-primary border-b-2 border-brand-primary">
-          Description
-        </button>
-
-        <button class="py-5 text-sm font-medium text-slate-400 hover:text-brand-primary transition">
-          Specifications
-        </button>
-
-        <button class="py-5 text-sm font-medium text-slate-400 hover:text-brand-primary transition">
-          Reviews (124)
-        </button>
-      </div>
-
-      <!-- Content -->
-      <div class="p-6 sm:p-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <!-- Description -->
-          <div>
-            <h2 class="text-lg font-bold mb-4">Product Description</h2>
-
-            <p class="text-sm text-slate-500 leading-7">
-              The Orca Leather Boots Anthracite are built for people who want a combination of
-              style, comfort and durability. Made from high-quality leather with a strong rubber
-              sole, these boots are suitable for daily wear and outdoor activities.
-            </p>
-
-            <p class="text-sm text-slate-500 leading-7 mt-4">
-              The timeless anthracite color makes them easy to combine with different outfits, while
-              the padded interior provides comfortable support throughout the day.
-            </p>
-          </div>
-
-          <!-- Specifications -->
-          <div>
-            <h2 class="text-lg font-bold mb-4">Specifications</h2>
-
-            <div class="space-y-3">
-              <div class="flex justify-between py-3 border-b border-slate-200/70">
-                <span class="text-xs text-slate-400"> Brand </span>
-
-                <span class="text-xs font-semibold"> ORCA </span>
-              </div>
-
-              <div class="flex justify-between py-3 border-b border-slate-200/70">
-                <span class="text-xs text-slate-400"> Material </span>
-
-                <span class="text-xs font-semibold"> Premium Leather </span>
-              </div>
-
-              <div class="flex justify-between py-3 border-b border-slate-200/70">
-                <span class="text-xs text-slate-400"> Color </span>
-
-                <span class="text-xs font-semibold"> Anthracite </span>
-              </div>
-
-              <div class="flex justify-between py-3 border-b border-slate-200/70">
-                <span class="text-xs text-slate-400"> Sole </span>
-
-                <span class="text-xs font-semibold"> Rubber </span>
-              </div>
-
-              <div class="flex justify-between py-3">
-                <span class="text-xs text-slate-400"> SKU </span>
-
-                <span class="text-xs font-semibold"> ORC-ANT-001 </span>
+                  <span class="text-xs font-semibold">
+                    {{ product.reviews?.length ?? 0 }}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ================= RELATED PRODUCTS ================= -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-    <div class="flex items-end justify-between mb-6">
-      <div>
-        <p class="text-xs uppercase tracking-widest font-bold text-brand-secondary mb-2">
-          You may also like
-        </p>
+    <section class="mx-auto w-full max-w-7xl min-w-0 px-3 pb-12 sm:px-6 sm:pb-16 lg:px-8">
+      <div class="mb-6 flex items-end justify-between">
+        <div>
+          <p class="mb-2 text-xs font-bold uppercase tracking-widest text-brand-secondary">
+            You may also like
+          </p>
 
-        <h2 class="text-2xl sm:text-3xl font-bold">Related Products</h2>
+          <h2 class="text-2xl font-bold sm:text-3xl">Related Products</h2>
+        </div>
+
+        <a
+          routerLink="/shop"
+          class="hidden items-center gap-2 text-sm font-semibold text-brand-primary transition-all hover:gap-3 sm:flex"
+        >
+          View all
+
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
       </div>
 
-      <a
-        href="#"
-        class="hidden sm:flex items-center gap-2 text-sm font-semibold text-brand-primary hover:gap-3 transition-all"
-      >
-        View all
-        <i class="fa-solid fa-arrow-right text-xs"></i>
-      </a>
-    </div>
-
-    <!-- Products -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-      <!-- Card 1 -->
-      <article
-        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
-      >
-        <div class="relative aspect-square bg-slate-50 overflow-hidden">
-          <span
-            class="absolute top-3 left-3 z-10 bg-brand-secondary text-white text-2xs font-bold px-2 py-1 rounded-full"
-          >
-            -18%
-          </span>
-
-          <button
-            class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-brand-danger"
-          >
-            <i class="fa-regular fa-heart text-xs"></i>
-          </button>
-
-          <img
-            src="https://images.unsplash.com/photo-1552346154-21d32810aba3?w=500"
-            alt="Sneakers"
-            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-
-        <div class="p-4">
-          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Footwear</p>
-
-          <h3 class="text-sm font-bold mt-1 line-clamp-2">Urban Classic Sneakers</h3>
-
-          <div class="flex items-center gap-1 mt-2">
-            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
-            <span class="text-[11px] font-semibold"> 4.7 </span>
-          </div>
-
-          <div class="flex items-center justify-between mt-4">
-            <span class="text-base font-extrabold text-brand-primary"> 1,850 EGP </span>
-
-            <button
-              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
-            >
-              <i class="fa-solid fa-plus text-xs"></i>
-            </button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 2 -->
-      <article
-        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
-      >
-        <div class="relative aspect-square bg-slate-50 overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500"
-            alt="Casual shoes"
-            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-
-        <div class="p-4">
-          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Footwear</p>
-
-          <h3 class="text-sm font-bold mt-1 line-clamp-2">Everyday Leather Shoes</h3>
-
-          <div class="flex items-center gap-1 mt-2">
-            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
-            <span class="text-[11px] font-semibold"> 4.6 </span>
-          </div>
-
-          <div class="flex items-center justify-between mt-4">
-            <span class="text-base font-extrabold text-brand-primary"> 2,200 EGP </span>
-
-            <button
-              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
-            >
-              <i class="fa-solid fa-plus text-xs"></i>
-            </button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article
-        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
-      >
-        <div class="relative aspect-square bg-slate-50 overflow-hidden">
-          <span
-            class="absolute top-3 left-3 z-10 bg-brand-secondary text-white text-2xs font-bold px-2 py-1 rounded-full"
-          >
-            -12%
-          </span>
-
-          <img
-            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
-            alt="Sport shoes"
-            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-
-        <div class="p-4">
-          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Sneakers</p>
-
-          <h3 class="text-sm font-bold mt-1 line-clamp-2">Performance Running Shoes</h3>
-
-          <div class="flex items-center gap-1 mt-2">
-            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
-            <span class="text-[11px] font-semibold"> 4.9 </span>
-          </div>
-
-          <div class="flex items-center justify-between mt-4">
-            <span class="text-base font-extrabold text-brand-primary"> 2,750 EGP </span>
-
-            <button
-              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
-            >
-              <i class="fa-solid fa-plus text-xs"></i>
-            </button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Card 4 -->
-      <article
-        class="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-dark/5 transition-all duration-300"
-      >
-        <div class="relative aspect-square bg-slate-50 overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?w=500"
-            alt="Leather shoes"
-            class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-
-        <div class="p-4">
-          <p class="text-2xs uppercase font-semibold tracking-wide text-brand-primary">Shoes</p>
-
-          <h3 class="text-sm font-bold mt-1 line-clamp-2">Premium Brown Boots</h3>
-
-          <div class="flex items-center gap-1 mt-2">
-            <i class="fa-solid fa-star text-brand-secondary text-2xs"></i>
-            <span class="text-[11px] font-semibold"> 4.8 </span>
-          </div>
-
-          <div class="flex items-center justify-between mt-4">
-            <span class="text-base font-extrabold text-brand-primary"> 3,250 EGP </span>
-
-            <button
-              class="w-9 h-9 rounded-full bg-brand-primary text-white hover:bg-brand-secondary transition"
-            >
-              <i class="fa-solid fa-plus text-xs"></i>
-            </button>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-</div>
+      <div class="grid min-w-0 grid-cols-2 gap-3 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
+        @for (relatedProduct of products(); track relatedProduct.id) {
+          <app-card class="block min-w-0" [product]="relatedProduct"></app-card>
+        }
+      </div>
+    </section>
+  </div>
+}
