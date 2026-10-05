@@ -54,6 +54,13 @@ export const routes: Routes = [
       import('../app/core/auth/components/login/login.component').then((f) => f.LoginComponent),
   },
   {
+    path: 'allorders',
+    loadComponent: () =>
+      import('./features/components/account/components/orders/orders.component').then(
+        (m) => m.OrdersComponent,
+      ),
+  },
+  {
     path: 'account',
     loadComponent: () =>
       import('./features/components/account/account.component').then((m) => m.AccountComponent),

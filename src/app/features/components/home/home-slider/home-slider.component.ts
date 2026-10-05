@@ -24,7 +24,7 @@ export class HomeSliderComponent implements OnInit, OnDestroy {
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   // ----- Hero carousel data & state -----
-  readonly slides: HeroSlide[] = [
+  readonly slides: IHeroSlide[] = [
     {
       eyebrow: 'Fresh This Week',
       title: 'Farm-Fresh Produce Delivered Today',
@@ -63,7 +63,7 @@ export class HomeSliderComponent implements OnInit, OnDestroy {
 
   // ----- Flash Deals data & countdown state -----
   // بيانات وهمية حاليًا — استبدلها بمنتجات حقيقية فيها priceAfterDiscount وقت ما تجهز
-  readonly deals: DealProduct[] = [
+  readonly deals: IDealProduct[] = [
     {
       id: 1,
       name: 'Cold-Pressed Olive Oil 500ml',

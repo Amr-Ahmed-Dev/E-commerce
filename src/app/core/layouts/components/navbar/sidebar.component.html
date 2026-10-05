@@ -1,7 +1,7 @@
 <!-- Vertical Sidebar Navbar — Shopping Zone -->
 
 <aside
-  class="fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col items-center bg-brand-surface py-5 md:flex"
+  class="fixed left-0 top-0 z-50 hidden h-screen w-[72px] flex-col items-center bg-brand-bg py-5 md:flex"
 >
   <!-- Brand Mark (inline SVG logo) -->
   <a
@@ -85,12 +85,23 @@
       <i data-cart-icon class="fa-solid fa-cart-shopping text-lg"></i>
       @if (cartDetail().numOfCartItems > 0) {
         <span
-          class="absolute top-1 right-1 w-4 h-4 bg-brand-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white"
+          class="absolute top-1 right-1 w-4 h-4 bg-brand-light text-white text-[9px] font-bold rounded-full flex items-center justify-center"
         >
           {{ cartDetail().numOfCartItems }}
         </span>
       }
     </button>
+
+    <!-- All Orders -->
+    <a
+      routerLink="/allorders"
+      routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm shadow-brand-secondary/30"
+      class="flex h-11 w-11 items-center justify-center rounded-2xl text-slate-400 transition-all hover:bg-slate-100 hover:text-brand-primary"
+      aria-label="All Orders"
+      title="All Orders"
+    >
+      <i class="fa-solid fa-receipt text-lg"></i>
+    </a>
 
     <!-- Offers / Tag -->
     <a

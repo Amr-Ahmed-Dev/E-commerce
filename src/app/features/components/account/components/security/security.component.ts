@@ -36,7 +36,7 @@ export class SecurityComponent {
   }
 
   // ----- Active sessions -----
-  readonly sessions: ISession[] = [
+  readonly sessions: IUserSession[] = [
     {
       id: '1',
       device: 'Chrome on Windows',

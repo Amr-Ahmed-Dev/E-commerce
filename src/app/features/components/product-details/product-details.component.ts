@@ -107,7 +107,7 @@ export class ProductDetailsComponent implements OnInit {
     this.animateProductToCardService.animateProductToCart(event);
 
     this.cartService.addProductToCart(productId).subscribe({
-      next: (response: IResponseAddItemToCart) => {
+      next: (response: IAddToCartResponse) => {
         this.toasterService.success(response.message, 'Added To Cart');
       },
     });

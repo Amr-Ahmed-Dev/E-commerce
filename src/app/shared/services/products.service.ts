@@ -14,7 +14,6 @@ export class ProductsService {
   private readonly productsUrl = `${environment.BASE_URL}/products`;
 
   // Stores fetched products and exposes them as reactive state.
-  readonly products = signal<IProduct[]>([]);
 
   getProducts(page = 1, limit = 12): Observable<IResponse<IProduct>> {
     return this.http.get<IResponse<IProduct>>(this.productsUrl, { params: { page, limit } });

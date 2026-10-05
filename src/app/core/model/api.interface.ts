@@ -103,7 +103,7 @@ interface ICartResponse {
   data: ICartData;
 }
 
-interface IResponseAddItemToCart extends ICartResponse {
+interface IAddToCartResponse extends ICartResponse {
   message: string;
 }
 
@@ -126,7 +126,7 @@ interface IProductCart {
 
 // ==================== Carousel ====================
 
-interface HeroSlide {
+interface IHeroSlide {
   eyebrow: string;
   title: string;
   subtitle: string;
@@ -135,7 +135,7 @@ interface HeroSlide {
   background: string;
 }
 
-interface DealProduct {
+interface IDealProduct {
   id: number;
   name: string;
   image: string;
@@ -167,9 +167,9 @@ interface IShippingAddress {
 }
 interface ICheckoutSessionResponse {
   status: string;
-  session: Isession;
+  session: ICheckoutSession;
 }
-interface Isession {
+interface ICheckoutSession {
   url: string;
   success_url: string;
   cancel_url: string;
@@ -181,11 +181,82 @@ interface ICheckoutSessionOptions {
   url?: string;
 }
 
-interface ISession {
+interface IUserSession {
   id: string;
   device: string;
   icon: 'desktop' | 'mobile';
   location: string;
   lastActive: string;
   current: boolean;
+}
+
+// ================== Orders ===============
+
+interface IOrderResponse {
+  status: string;
+  data: IOrder[];
+}
+
+interface IOrder {
+  taxPrice: number;
+  shippingPrice: number;
+  totalOrderPrice: number;
+  paymentMethodType: string;
+  isPaid: boolean;
+  isDelivered: boolean;
+  _id: string;
+  user: IOrderUser;
+  cartItems: IOrderCartItem[];
+  shippingAddress?: IShippingAddress;
+  createdAt: string;
+  updatedAt: string;
+  id: number;
+  __v: number;
+}
+
+interface IOrderUser {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+}
+
+interface IOrderCartItem {
+  count: number;
+  _id: string;
+  product: IOrderProduct;
+  price: number;
+}
+
+interface IOrderProduct {
+  _id: string;
+  id: string;
+  title: string;
+  imageCover: string;
+  ratingsQuantity: number;
+  ratingsAverage: number;
+  category: IOrderCategory;
+  brand: IOrderBrand;
+  subcategory: IOrderSubcategory[];
+}
+
+interface IOrderCategory {
+  _id: string;
+  name: string;
+  slug: string;
+  image: string;
+}
+
+interface IOrderBrand {
+  _id: string;
+  name: string;
+  slug: string;
+  image: string;
+}
+
+interface IOrderSubcategory {
+  _id: string;
+  name: string;
+  slug: string;
+  category: string;
 }

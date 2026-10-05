@@ -48,9 +48,9 @@ export class CartService {
   }
 
   // Add a product to the cart and update the shared cart state.
-  addProductToCart(productId: string): Observable<IResponseAddItemToCart> {
+  addProductToCart(productId: string): Observable<IAddToCartResponse> {
     return this.http
-      .post<IResponseAddItemToCart>(this.cartUrl, { productId })
+      .post<IAddToCartResponse>(this.cartUrl, { productId })
       .pipe(tap((res) => this.cartdetail.set(res)));
   }
 

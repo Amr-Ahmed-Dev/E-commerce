@@ -9,14 +9,14 @@
    has no position/z-index and won't display correctly (or at all) */
 @import 'ngx-toastr/toastr';
 
-@theme {
+/* @theme {
   --color-cream-primary: #064e3b;
   --color-cream-accent: #f97316;
   --color-cream-surface: #ffffff;
   --color-cream-bg: #fafaf9;
   --color-cream-text: #022c22;
   --color-cream-danger: #e11d48;
-}
+} */
 @theme {
   --color-brand-primary: #2563eb; /* Blue — from the logo's top-left gradient */
   --color-brand-secondary: #9333ea; /* Purple — from the logo's bottom-right gradient */
@@ -25,6 +25,7 @@
   --color-brand-bg: #f8fafc;
   --color-brand-danger: #e11d48;
 }
+
 @property --toast-progress {
   syntax: '<number>';
   inherits: false;

@@ -1,0 +1,253 @@
+<div class="min-h-screen bg-brand-surface text-brand-dark">
+  <!-- ================= HEADER ================= -->
+  <header class="border-b border-slate-200/80 bg-white">
+    <div class="mx-auto w-full max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <div class="mb-5 flex items-center gap-2 text-xs font-medium text-slate-400">
+        <a routerLink="/shop" class="transition-colors hover:text-brand-primary"> Shop </a>
+
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+
+        <span class="text-slate-500">Order History</span>
+      </div>
+
+      <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight text-brand-dark sm:text-3xl">
+            Order History
+          </h1>
+
+          <p class="mt-2 text-sm text-slate-500">Track and manage all your previous orders.</p>
+        </div>
+
+        @if (orders().length > 0) {
+          <div
+            class="inline-flex w-fit items-center gap-2 rounded-xl border border-brand-primary/10 bg-brand-primary/5 px-3.5 py-2 text-sm font-semibold text-brand-primary"
+          >
+            <i class="fa-solid fa-receipt text-xs"></i>
+
+            <span>{{ orders().length }} Orders</span>
+          </div>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= ORDERS ================= -->
+  <main class="mx-auto w-full max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+    @if (orders().length > 0) {
+      <div class="space-y-4">
+        @for (currentOrder of orders(); track currentOrder._id) {
+          <article
+            class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.04)] transition-all duration-300 hover:border-slate-300 hover:shadow-[0_8px_30px_rgba(15,23,42,0.07)]"
+          >
+            <!-- ================= ORDER TOP ================= -->
+            <div
+              class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+            >
+              <!-- Order Identity -->
+              <div class="flex items-center gap-3.5">
+                <div
+                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600"
+                >
+                  <i class="fa-solid fa-receipt"></i>
+                </div>
+
+                <div class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <p class="text-sm font-bold text-brand-dark">Order #{{ currentOrder._id }}</p>
+
+                    <span class="hidden h-1 w-1 rounded-full bg-slate-300 sm:block"></span>
+
+                    <p class="text-xs text-slate-400">
+                      {{ currentOrder.createdAt | date: 'MMM d, y' }}
+                    </p>
+                  </div>
+
+                  <p class="mt-1 text-xs text-slate-400">
+                    {{ currentOrder.cartItems.length }} items
+                  </p>
+                </div>
+              </div>
+
+              <!-- Status -->
+              <div class="flex flex-wrap items-center gap-2">
+                <!-- Delivery Status -->
+                <span
+                  class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold"
+                  [class.bg-emerald-50]="currentOrder.isDelivered"
+                  [class.text-emerald-600]="currentOrder.isDelivered"
+                  [class.bg-amber-50]="!currentOrder.isDelivered"
+                  [class.text-amber-600]="!currentOrder.isDelivered"
+                >
+                  <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+
+                  {{ currentOrder.isDelivered ? 'Delivered' : 'Processing' }}
+                </span>
+
+                <!-- Payment Status -->
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold"
+                  [class.bg-emerald-50]="currentOrder.isPaid"
+                  [class.text-emerald-600]="currentOrder.isPaid"
+                  [class.bg-rose-50]="!currentOrder.isPaid"
+                  [class.text-brand-danger]="!currentOrder.isPaid"
+                >
+                  <i
+                    [class.fa-circle-check]="currentOrder.isPaid"
+                    [class.fa-clock]="!currentOrder.isPaid"
+                    class="fa-solid text-[10px]"
+                  ></i>
+
+                  {{ currentOrder.isPaid ? 'Paid' : 'Unpaid' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- ================= PRODUCTS ================= -->
+            <div class="px-5 py-5 sm:px-6">
+              <div class="space-y-2">
+                @for (item of currentOrder.cartItems; track item._id) {
+                  <div
+                    class="group flex items-center gap-3 rounded-xl border border-transparent bg-slate-50/70 p-2.5 transition-colors hover:border-slate-200 hover:bg-white sm:gap-4 sm:p-3"
+                  >
+                    <!-- Image -->
+                    <div
+                      class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white ring-1 ring-slate-200/70 sm:h-[72px] sm:w-[72px]"
+                    >
+                      @if (item.product.imageCover) {
+                        <img
+                          [src]="item.product.imageCover"
+                          [alt]="item.product.title"
+                          class="h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-105"
+                        />
+                      } @else {
+                        <i class="fa-solid fa-box text-xl text-slate-300"></i>
+                      }
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="min-w-0 flex-1">
+                      <h3 class="line-clamp-2 text-sm font-semibold leading-5 text-brand-dark">
+                        {{ item.product.title }}
+                      </h3>
+
+                      <div
+                        class="mt-1.5 flex flex-wrap items-center gap-x-3 text-xs text-slate-400"
+                      >
+                        <span> Qty: {{ item.count }} </span>
+
+                        <span class="hidden h-1 w-1 rounded-full bg-slate-300 sm:block"></span>
+
+                        <span> ${{ item.price }} each </span>
+                      </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="shrink-0 text-right">
+                      <p class="text-[10px] font-medium uppercase tracking-wide text-slate-400">
+                        Total
+                      </p>
+
+                      <p class="mt-1 text-sm font-bold text-brand-dark sm:text-base">
+                        ${{ item.price * item.count }}
+                      </p>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <!-- ================= FOOTER ================= -->
+              <div
+                class="mt-5 flex flex-col gap-5 border-t border-slate-100 pt-5 lg:flex-row lg:items-center lg:justify-between"
+              >
+                <!-- Summary -->
+                <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+                  <!-- Items -->
+                  <div>
+                    <p class="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                      Items
+                    </p>
+
+                    <p class="mt-1 ms-3 text-sm font-semibold text-brand-dark">
+                      {{ currentOrder.cartItems.length }}
+                    </p>
+                  </div>
+
+                  <!-- Payment -->
+                  <div>
+                    <p class="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                      Payment
+                    </p>
+
+                    <p
+                      class="mt-1 flex items-center gap-1.5 text-sm font-semibold capitalize text-brand-dark"
+                    >
+                      @if (currentOrder.paymentMethodType === 'cash') {
+                        <i class="fa-solid fa-money-bill-wave text-xs text-brand-primary"></i>
+                      } @else {
+                        <i class="fa-solid fa-credit-card text-xs text-brand-primary"></i>
+                      }
+
+                      {{ currentOrder.paymentMethodType }}
+                    </p>
+                  </div>
+
+                  <!-- Total -->
+                  <div>
+                    <p class="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                      Order Total
+                    </p>
+
+                    <p class="mt-1 text-base font-bold text-brand-primary">
+                      ${{ currentOrder.totalOrderPrice }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- View Details -->
+                <button
+                  type="button"
+                  class="group flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-600 transition-all hover:border-brand-primary hover:bg-brand-primary hover:text-white sm:w-auto"
+                >
+                  <span>View Details</span>
+
+                  <i
+                    class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"
+                  ></i>
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <!-- ================= EMPTY STATE ================= -->
+      <div
+        class="flex min-h-[440px] flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-center shadow-[0_4px_24px_rgba(15,23,42,0.03)]"
+      >
+        <div
+          class="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary"
+        >
+          <i class="fa-solid fa-receipt text-3xl"></i>
+        </div>
+
+        <h2 class="text-xl font-bold tracking-tight text-brand-dark">No orders yet</h2>
+
+        <p class="mt-2 max-w-md text-sm leading-6 text-slate-500">
+          You haven't placed any orders yet. Once you complete your first purchase, your order
+          history will appear here.
+        </p>
+
+        <a
+          routerLink="/shop"
+          class="mt-6 inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary px-6 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+        >
+          <i class="fa-solid fa-bag-shopping text-xs"></i>
+
+          <span>Start Shopping</span>
+        </a>
+      </div>
+    }
+  </main>
+</div>
