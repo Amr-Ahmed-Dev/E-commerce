@@ -12,10 +12,38 @@
       <aside
         class="rounded-3xl border border-slate-200 bg-brand-surface p-6 shadow-sm md:self-start"
       >
-        <div
-          class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-3xl font-bold text-white"
-        >
-          {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+        <div class="relative mx-auto h-20 w-20">
+          <label
+            for="profile-image"
+            class="group relative block h-20 w-20 cursor-pointer overflow-hidden rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-3xl font-bold text-white"
+          >
+            @if (profileService.profileImage()) {
+              <img
+                [src]="profileService.profileImage()"
+                alt="Profile picture"
+                class="h-full w-full object-cover"
+              />
+            } @else {
+              <div class="flex h-full w-full items-center justify-center">
+                {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+              </div>
+            }
+
+            <!-- Hover overlay -->
+            <div
+              class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100"
+            >
+              <i class="fa-solid fa-camera text-lg text-white"></i>
+            </div>
+          </label>
+
+          <input
+            id="profile-image"
+            type="file"
+            accept="image/*"
+            class="hidden"
+            (change)="onProfileImageSelected($event)"
+          />
         </div>
 
         <div class="mt-4 text-center">
@@ -52,7 +80,7 @@
           <a
             routerLink="/allorders"
             routerLinkActive="bg-brand-primary/10 text-brand-primary"
-            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+            class="block rounded-xl px-3.5 py-2.5 md:hidden text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
           >
             My orders
           </a>
@@ -64,9 +92,9 @@
             Addresses
           </a>
           <a
-            routerLink="wishlist"
+            routerLink="/wishlist"
             routerLinkActive="bg-brand-primary/10 text-brand-primary"
-            class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
+            class="block rounded-xl md:hidden px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-brand-bg"
           >
             Wishlist
           </a>

@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CartService } from '../../../../shared/services/cart.service';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../../../auth/services/auth.service';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive],
@@ -16,6 +17,7 @@ export class SidebarComponent implements OnInit {
 
   cartDetail = this.cartService.cartdetail;
   private readonly platformId = inject(PLATFORM_ID);
+  profileService = inject(ProfileService);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   ngOnInit(): void {

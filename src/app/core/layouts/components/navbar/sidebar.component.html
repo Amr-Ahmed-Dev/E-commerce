@@ -137,19 +137,28 @@
   </button>
 
   <!-- Avatar / Account -->
+
   @if (authService.userEmail()) {
     <a
       routerLink="/account"
-      class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-sm font-bold text-white"
+      class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-sm font-bold text-white"
       aria-label="Account"
     >
-      {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+      @if (profileService.profileImage()) {
+        <img
+          [src]="profileService.profileImage()!"
+          alt="User profile picture"
+          class="h-full w-full object-cover"
+        />
+      } @else {
+        {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+      }
     </a>
   } @else {
     <a
       routerLink="/login"
       routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm shadow-brand-secondary/30"
-      class="group flex w-13 h-13 flex-col items-center justify-center gap-1 rounded-2xl text-slate-400 transition-all hover:bg-slate-100 hover:text-brand-primary active:scale-95"
+      class="group flex h-13 w-13 flex-col items-center justify-center gap-1 rounded-2xl text-slate-400 transition-all hover:bg-slate-100 hover:text-brand-primary active:scale-95"
       aria-label="Sign in"
       title="Sign in"
     >
@@ -165,7 +174,7 @@
   <a
     routerLink="/"
     [routerLinkActiveOptions]="{ exact: true }"
-    routerLinkActive="text-brand-primary"
+    routerLinkActive="text-slate-800"
     class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400"
     aria-label="Home"
   >
@@ -174,7 +183,7 @@
 
   <a
     routerLink="/shop"
-    routerLinkActive="text-brand-primary"
+    routerLinkActive="text-slate-800"
     class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400"
     aria-label="Shop"
   >
@@ -184,7 +193,7 @@
   <a
     routerLink="/cart"
     routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white"
-    class="relative flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-md"
+    class="relative flex h-11 w-11 items-center justify-center rounded-full text-slate-400 shadow-md"
     aria-label="Shopping cart"
   >
     <i data-cart-icon class="fa-solid fa-cart-shopping text-lg"></i>
@@ -198,18 +207,41 @@
   </a>
 
   <a
-    href="#"
+    routerLink="/wishlist"
+    routerLinkActive="text-slate-800"
     class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400"
     aria-label="Offers"
   >
     <i class="fa-solid fa-tag text-lg"></i>
   </a>
 
-  <a
-    routerLink="/account"
-    class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary text-sm font-bold text-white"
-    aria-label="Account"
-  >
-    {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
-  </a>
+  @if (authService.userEmail()) {
+    <a
+      routerLink="/account"
+      routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary"
+      class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-gray-400 text-lg font-bold text-white"
+      aria-label="Account"
+    >
+      @if (profileService.profileImage()) {
+        <img
+          [src]="profileService.profileImage()!"
+          alt="User profile picture"
+          class="h-full w-full object-cover"
+        />
+      } @else {
+        {{ authService.userEmail()?.trim()?.charAt(0)?.toUpperCase() || 'A' }}
+      }
+    </a>
+  } @else {
+    <a
+      routerLink="/login"
+      routerLinkActive="bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm shadow-brand-secondary/30"
+      class="group flex h-13 w-13 flex-col items-center justify-center gap-1 rounded-2xl text-slate-400 transition-all hover:bg-slate-100 hover:text-brand-primary active:scale-95"
+      aria-label="Sign in"
+      title="Sign in"
+    >
+      <i class="fa-solid fa-user text-lg"></i>
+      <span class="text-[11px] font-medium">Sign in</span>
+    </a>
+  }
 </nav>
