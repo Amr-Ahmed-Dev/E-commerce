@@ -8,7 +8,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   const routerService = inject(Router);
   const platformId = inject(PLATFORM_ID);
 
-  // على السيرفر: سيبه يعدي عادي (متعملش redirect)
   if (!isPlatformBrowser(platformId)) {
     return true;
   }
