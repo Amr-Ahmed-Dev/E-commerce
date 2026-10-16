@@ -30,15 +30,25 @@ export const handleErrorInterceptor: HttpInterceptorFn = (req, next) => {
           );
           break;
 
-        case 401:
-          authService.token.set(null);
-          authService.userEmail.set(null);
-          localStorage.removeItem(authService.USER_TOKEN);
-          localStorage.removeItem(authService.USER_EMAIL);
+        case 401: {
+          const isAuthRequest =
+            req.url.includes('/signin') ||
+            req.url.includes('/signup') ||
+            req.url.includes('/login');
+          const hadToken = !!authService.token();
 
-          toasterService.error('Incorrect email or password');
-          router.navigateByUrl('/login');
+          if (isAuthRequest) {
+            toasterService.error('Incorrect email or password');
+          } else if (hadToken) {
+            authService.token.set(null);
+            authService.userEmail.set(null);
+            localStorage.removeItem(authService.USER_TOKEN);
+            localStorage.removeItem(authService.USER_EMAIL);
+            toasterService.error('Your session has expired. Please sign in again.');
+            router.navigateByUrl('/login');
+          }
           break;
+        }
 
         case 403:
           toasterService.error('You do not have permission to do this.', 'Forbidden');

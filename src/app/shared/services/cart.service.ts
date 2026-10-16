@@ -37,6 +37,11 @@ export class CartService {
   // Indicates whether a cart request is currently in progress.
   readonly isLoading = signal(false);
 
+  // Reset the shared cart state (used on logout / when there is no token).
+  resetCart(): void {
+    this.cartdetail.set(this.emptyCart);
+  }
+
   // Get the current user's cart and update the shared cart state.
   getCartItems(): Observable<ICartResponse> {
     this.isLoading.set(true);
@@ -63,9 +68,7 @@ export class CartService {
 
   // Clear the cart and reset the shared cart state.
   clearCartItems(): Observable<void> {
-    return this.http
-      .delete<void>(this.cartUrl)
-      .pipe(tap(() => this.cartdetail.set(this.emptyCart)));
+    return this.http.delete<void>(this.cartUrl).pipe(tap(() => this.resetCart()));
   }
 
   // Update the quantity of a product and refresh the shared cart state.
